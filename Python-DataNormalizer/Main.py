@@ -1,5 +1,3 @@
-import os
-import pandas as pd
 from Data_Normalizer import DataNormalizer
 
 try:
@@ -8,6 +6,3 @@ try:
     data_normalizer.write_data(csv_data)
 except Exception as e:
     print(f"Error: {e}")
-
-
-

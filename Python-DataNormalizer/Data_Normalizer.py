@@ -1,5 +1,7 @@
 import os
+
 import pandas as pd
+
 
 class DataNormalizer:
     def __init__(self, rootFolder):
@@ -19,9 +21,9 @@ class DataNormalizer:
             df = pd.read_csv(path_csv)
             id_num = os.path.basename(os.path.dirname(path_csv))
             if not self.check_column(df, id_num):
-                 df.insert(0, id_num, id_num)
-                 df.to_csv(path_csv, index=False)
-                 print(f"Document: [{path_csv}] - Operation Success")
+                df.insert(0, id_num, id_num)
+                df.to_csv(path_csv, index=False)
+                print(f"Document: [{path_csv}] - Operation Success")
             else:
                 print(f"Document: [{path_csv}] - Already normalized")
 
