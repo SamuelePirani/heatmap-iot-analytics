@@ -2,7 +2,7 @@ import os
 import yaml
 
 # Open config.yaml, in order to obtain the iot data path
-with open("config.yml", "r") as file:
+with open("./config.yml", "r") as file:
     config = yaml.safe_load(file)
 
 class SparkDataRader(object):
