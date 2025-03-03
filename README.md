@@ -26,6 +26,19 @@ tool.
 This project uses [Conda](https://docs.conda.io/en/latest/) to manage its dependencies and ensure a consistent
 development environment across different machines.
 
+### JDK 17 Installation
+
+Since the analytics in this project rely on Java-based components, a Java Development Kit (JDK) version 17 or later is required. Here’s how you can install it:
+
+1. Visit the official website of your preferred JDK distributor. For instance, you can use:
+    - [Oracle JDK 17 Downloads](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
+2. Download the installer for your operating system and follow the provided steps to complete the installation.
+3. Once installed, verify your Java installation by running:
+   ```bash
+   java --version
+   ```
+4. Ensure that the `JAVA_HOME` environment variable is set to the path of your JDK 17 installation.
+
 ### Conda Installation
 
 If you don't have Conda installed, please download and install [Anaconda](https://www.anaconda.com/download) following
