@@ -1,15 +1,27 @@
 import os
+
 import yaml
 
-# Open config.yaml, in order to obtain the iot data path
-with open("./config.yml", "r") as file:
+# Define ROOT and HOME variables
+ROOT = os.getcwd()  # Current working directory
+HOME = os.path.dirname(ROOT)  # Parent directory of ROOT
+
+# Build the path to the config file relative to ROOT
+config_file_path = os.path.join(HOME, "config.yml")
+
+# Open the config file
+with open(config_file_path, "r") as file:
     config = yaml.safe_load(file)
+
+# Optional: adjust the iot_data_path to be absolute based on ROOT
+config["iot_data_path"] = os.path.join(HOME, config["iot_data_path"])
+
 
 class SparkDataRader(object):
     def __init__(self, spark):
         self.spark_session = spark
 
-    #Read data based on the name provided by the sender class
+    # Read data based on the name provided by the sender class
     def read(self, csv_to_read):
         csv_files = []
         for subdir, dirs, files in os.walk(config["iot_data_path"]):
@@ -17,8 +29,7 @@ class SparkDataRader(object):
                 if file.endswith(csv_to_read):
                     path_name = os.path.join(subdir, file)
                     df = self.spark_session.read.csv(path_name, header=False, inferSchema=True)
-                    column_names = ["ID_Room", f"Timestamp",
-                                f"Value_{os.path.splitext(file)[0]}"]
+                    column_names = ["ID_Room", f"Timestamp", f"Value_{os.path.splitext(file)[0]}"]
                     df = df.toDF(*column_names)
                     csv_files.append(df)
         return csv_files
