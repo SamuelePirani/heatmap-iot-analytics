@@ -13,7 +13,7 @@ with open(config_file_path, "r") as file:
 config["iot_data_path"] = os.path.join(HOME, config["iot_data_path"])
 
 
-class SparkDataRader(object):
+class SparkDataReader(object):
     def __init__(self, spark):
         self.spark_session = spark
 
