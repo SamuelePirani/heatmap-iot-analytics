@@ -54,7 +54,7 @@ Once the environment is created or updated, activate it with the following comma
 specified in the `environment.yml` file):
 
 ```bash
-conda activate <env_name>
+conda activate heatmap-analytics
 ```
 
 Following these steps ensures that all required dependencies, including those needed for data processing and analytics,
