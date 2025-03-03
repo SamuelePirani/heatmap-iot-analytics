@@ -28,8 +28,7 @@ development environment across different machines.
 
 ### JDK 17 Installation
 
-Since the analytics in this project rely on Java-based components, a Java Development Kit (JDK) version 17 or later is
-required. Here’s how you can install it:
+Since the analytics in this project rely on Java-based components, a Java Development Kit (JDK) version 17 or later is required. Here’s how you can install it:
 
 1. Visit the official website of your preferred JDK distributor. For instance, you can use:
     - [Oracle JDK 17 Downloads](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
