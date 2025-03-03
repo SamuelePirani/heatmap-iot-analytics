@@ -1,31 +1,36 @@
+# SparkDataReader.py
 import os
-import sys
+from typing import List
+
 import yaml
-
-ROOT = sys.path[1]
-print(ROOT)
-
-config_file_path = os.path.join(ROOT, "config.yml")
-
-with open(config_file_path) as file:
-    config = yaml.safe_load(file)
-
-config["iot_data_path"] = os.path.join(ROOT, config["iot_data_path"])
+from pyspark.sql import SparkSession, DataFrame
 
 
-class SparkDataReader(object):
-    def __init__(self, spark):
+class SparkDataReader:
+
+    def __init__(self, spark: SparkSession, config_path: str = None):
         self.spark_session = spark
+        self.config = self._load_config(config_path)
+        self.data_path = self.config["iot_data_path"]
 
+    def _load_config(self, config_path: str = None) -> dict:
+        root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        config_file_path = config_path or os.path.join(root, "config.yml")
+        with open(config_file_path, "r") as file:
+            config = yaml.safe_load(file)
+        # Update the IoT data path relative to the project root
+        config["iot_data_path"] = os.path.join(root, config["iot_data_path"])
+        return config
 
-    def read(self, csv_to_read):
+    def read(self, file_suffix: str) -> List[DataFrame]:
         csv_files = []
-        for subdir, dirs, files in os.walk(config["iot_data_path"]):
-            for f in files:
-                if f.endswith(csv_to_read):
-                    path_name = os.path.join(subdir, f)
-                    df = self.spark_session.read.csv(path_name, header=False, inferSchema=True)
-                    column_names = ["ID_Room", f"Timestamp", f"Value_{os.path.splitext(f)[0]}"]
+        for subdir, _, files in os.walk(self.data_path):
+            for filename in files:
+                if filename.endswith(file_suffix):
+                    full_path = os.path.join(subdir, filename)
+                    df = self.spark_session.read.csv(full_path, header=False, inferSchema=True)
+                    base_name = os.path.splitext(filename)[0]
+                    column_names = ["ID_Room", "Timestamp", f"Value_{base_name}"]
                     df = df.toDF(*column_names)
                     csv_files.append(df)
         return csv_files
