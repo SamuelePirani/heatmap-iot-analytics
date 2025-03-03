@@ -1,4 +1,3 @@
-# CO2Analyzer.py
 import datetime
 from typing import List
 
@@ -21,7 +20,9 @@ class CO2Analyzer:
 
     def aggregate_by_15min_windows(self, df: DataFrame) -> DataFrame:
         return (df.groupBy(window(col("Timestamp"), "15 minutes")).agg(avg("Value_co2").alias("average_value"),
-            min("Value_co2").alias("minimum_value"), max("Value_co2").alias("maximum_value")).orderBy("window"))
+                                                                       min("Value_co2").alias("minimum_value"),
+                                                                       max("Value_co2").alias("maximum_value")).orderBy(
+            "window"))
 
     def run_analysis(self):
         for raw_df in self.csv_dataframes:

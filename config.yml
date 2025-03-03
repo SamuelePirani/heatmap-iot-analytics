@@ -1,4 +1,4 @@
-iot_data_path: "./Data/IotData"
+iot_data_path: "./data/iot_data"
 time_interval: "15 minutes"
 date_range:
   start: "2025-03-02 11:00:00"

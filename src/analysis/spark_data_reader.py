@@ -1,4 +1,3 @@
-# SparkDataReader.py
 import os
 from typing import List
 
@@ -14,7 +13,7 @@ class SparkDataReader:
         self.data_path = self.config["iot_data_path"]
 
     def _load_config(self, config_path: str = None) -> dict:
-        root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         config_file_path = config_path or os.path.join(root, "config.yml")
         with open(config_file_path, "r") as file:
             config = yaml.safe_load(file)
