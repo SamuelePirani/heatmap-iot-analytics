@@ -2,18 +2,14 @@ import os
 
 import yaml
 
-# Define ROOT and HOME variables
-ROOT = os.getcwd()  # Current working directory
-HOME = os.path.dirname(ROOT)  # Parent directory of ROOT
+ROOT = os.getcwd()  
+HOME = os.path.dirname(ROOT)  
 
-# Build the path to the config file relative to ROOT
 config_file_path = os.path.join(HOME, "config.yml")
 
-# Open the config file
 with open(config_file_path, "r") as file:
     config = yaml.safe_load(file)
 
-# Optional: adjust the iot_data_path to be absolute based on ROOT
 config["iot_data_path"] = os.path.join(HOME, config["iot_data_path"])
 
 
