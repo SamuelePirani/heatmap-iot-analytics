@@ -38,7 +38,9 @@ class CO2Analyzer:
         for dfs in self.csv_dataframes:
             prepared_dfs = prepocessor.run_preprocess(dfs)
             self.aggregate_by_15min_windows(prepared_dfs)
+            
 
+            
             """
             for raw_df in self.csv_dataframes:
             prepared_df = self.prepare_dataframe(raw_df)
