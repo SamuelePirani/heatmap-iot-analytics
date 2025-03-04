@@ -42,7 +42,7 @@
          "properties":{
             "type":"Room",
             "name":"LA1",
-            "iot_device_id":415,
+            "room_id":415,
             "description":"Laboratorio 1 - Polo A"
          },
          "geometry":{
@@ -79,7 +79,7 @@
          "properties":{
             "type":"Room",
             "name":"AA1",
-            "iot_device_id":413,
+            "room_id":413,
             "description":"Aula AA1 - Polo b"
          },
          "geometry":{
@@ -116,7 +116,7 @@
          "properties":{
             "type":"Room",
             "name":"LA2",
-            "iot_device_id":"TODO",
+            "room_id":"417",
             "description":"TeamLab - Polo A"
          },
          "geometry":{
@@ -153,7 +153,7 @@
          "properties":{
             "type":"Room",
             "name":"AA3",
-            "iot_device_id":"TODO",
+            "room_id":"419",
             "description":"Aula AA3 - Polo A"
          },
          "geometry":{
