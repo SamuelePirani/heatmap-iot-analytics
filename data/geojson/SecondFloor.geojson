@@ -42,7 +42,7 @@
          "properties":{
             "type":"Room",
             "name":"AB2",
-            "iot_device_id":"TODO",
+            "room_id":"421",
             "description":"Aula AB2 - Polo A"
          },
          "geometry":{
@@ -79,7 +79,7 @@
          "properties":{
             "type":"Room",
             "name":"AB3",
-            "iot_device_id":"TODO",
+            "room_id":"422",
             "description":"Aula AB3 - Polo A"
          },
          "geometry":{
@@ -116,7 +116,7 @@
          "properties":{
             "type":"Room",
             "name":"AB1",
-            "iot_device_id":"TODO",
+            "room_id":"423",
             "description":"Aula AB1 - Polo A"
          },
          "geometry":{

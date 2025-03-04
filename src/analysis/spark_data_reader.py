@@ -17,7 +17,6 @@ class SparkDataReader:
         config_file_path = config_path or os.path.join(root, "config.yml")
         with open(config_file_path, "r") as file:
             config = yaml.safe_load(file)
-        # Update the IoT data path relative to the project root
         config["iot_data_path"] = os.path.join(root, config["iot_data_path"])
         return config
 
