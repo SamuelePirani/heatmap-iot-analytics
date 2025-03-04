@@ -3,7 +3,7 @@ import os
 import pandas as pd
 
 
-class DataNormalizer:
+class Data_Id_Marker:
     def __init__(self, rootFolder):
         self.rootFolder = rootFolder
 

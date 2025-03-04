@@ -22,8 +22,9 @@ class SparkDataReader:
         return config
 
     def read(self, file_suffix: str) -> List[DataFrame]:
-        csv_files = []
+        rooms = []
         for subdir, _, files in os.walk(self.data_path):
+            csv_files = []
             for filename in files:
                 if filename.endswith(file_suffix):
                     full_path = os.path.join(subdir, filename)
@@ -32,4 +33,5 @@ class SparkDataReader:
                     column_names = ["ID_Room", "Timestamp", f"Value_{base_name}"]
                     df = df.toDF(*column_names)
                     csv_files.append(df)
-        return csv_files
+            rooms.append(csv_files)
+        return rooms

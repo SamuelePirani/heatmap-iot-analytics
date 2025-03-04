@@ -9,7 +9,10 @@ class CO2Analyzer:
 
     def __init__(self, spark: SparkSession, reader):
         self.spark = spark
-        self.csv_dataframes: List[DataFrame] = reader.read("co2.csv")
+        self.csv_dataframes: List[DataFrame] = reader.read(".csv")
+        for room in self.csv_dataframes:
+            for csv_file in room:
+                print(csv_file.show())
 
     def prepare_dataframe(self, df: DataFrame) -> DataFrame:
         return df.withColumn("Timestamp", from_unixtime(col("Timestamp")).cast("timestamp"))
