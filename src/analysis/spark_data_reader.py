@@ -32,5 +32,6 @@ class SparkDataReader:
                     column_names = ["ID_Room", "Timestamp", f"Value_{base_name}"]
                     df = df.toDF(*column_names)
                     csv_files.append(df)
-            rooms.append(csv_files)
+            if len(csv_files) != 0:
+                rooms.append(csv_files)
         return rooms

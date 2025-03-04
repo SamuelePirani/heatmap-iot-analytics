@@ -10,8 +10,8 @@ def main():
         print("Loading data...")
         reader = SparkDataReader(spark)
         co2_analyzer = CO2Analyzer(spark, reader)
-        co2_analyzer.run_analysis()
         print("Loading Operation Complete")
+        co2_analyzer.run_analysis()
     except Exception as e:
         print(f"Error: {e}")
     finally:
