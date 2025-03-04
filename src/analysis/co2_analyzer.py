@@ -3,6 +3,7 @@ from typing import List
 
 from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql.functions import col, from_unixtime, to_date, avg, min, max, window
+from src.analysis.analysis_preprocessor import Analysis_PreProcessor
 
 
 class CO2Analyzer:
@@ -10,12 +11,6 @@ class CO2Analyzer:
     def __init__(self, spark: SparkSession, reader):
         self.spark = spark
         self.csv_dataframes: List[DataFrame] = reader.read(".csv")
-        for room in self.csv_dataframes:
-            for csv_file in room:
-                print(csv_file.show())
-
-    def prepare_dataframe(self, df: DataFrame) -> DataFrame:
-        return df.withColumn("Timestamp", from_unixtime(col("Timestamp")).cast("timestamp"))
 
     def extract_unique_days(self, df: DataFrame) -> List[datetime.date]:
         df_with_day = df.withColumn("day", to_date(col("Timestamp")))
@@ -28,6 +23,13 @@ class CO2Analyzer:
             "window"))
 
     def run_analysis(self):
+        prepocessor = Analysis_PreProcessor(self.spark)
+
+        for dfs in self.csv_dataframes:
+            for df in dfs:
+                df = prepocessor.prepare_datetime_column(df)
+                df.show()
+            """
         for raw_df in self.csv_dataframes:
             prepared_df = self.prepare_dataframe(raw_df)
             for day in self.extract_unique_days(prepared_df):
@@ -37,3 +39,4 @@ class CO2Analyzer:
                 filtered_df = prepared_df.filter(to_date(col("Timestamp")) == day)
                 aggregated_df = self.aggregate_by_15min_windows(filtered_df)
                 aggregated_df.show(truncate=False)
+                """
