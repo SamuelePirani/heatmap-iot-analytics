@@ -12,9 +12,3 @@ def run_preprocess(dfs):
         df = convert_timestamp_field(df)
         prepared_dfs.append(df)
     return prepared_dfs
-
-
-class Analysis_PreProcessor(object):
-
-    def __init__(self, spark):
-        self.spark = spark

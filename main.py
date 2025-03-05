@@ -2,7 +2,7 @@ import logging
 
 from pyspark.sql import SparkSession
 
-from src.analysis.co2_analyzer import CO2Analyzer
+from src.analysis.analyzer import Analyzer
 from src.analysis.spark_data_reader import SparkDataReader
 
 logger = logging.getLogger(__name__)
@@ -20,7 +20,7 @@ def main():
         logger.info("Loading data")
         reader = SparkDataReader(spark)
         logger.info("Running analysis")
-        co2_analyzer = CO2Analyzer(spark, reader)
+        co2_analyzer = Analyzer(spark, reader)
         logger.info("Loading Operation Complete")
         co2_analyzer.run_analysis()
     except Exception as e:

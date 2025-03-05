@@ -5,20 +5,21 @@ from concurrent.futures import ThreadPoolExecutor
 from pyspark.sql import SparkSession, DataFrame
 
 
+def _load_config(config_path: str = None) -> dict:
+    root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    config_file_path = config_path or os.path.join(root, "config.yml")
+    with open(config_file_path, "r") as file:
+        config = yaml.safe_load(file)
+    config["iot_data_path"] = os.path.join(root, config["iot_data_path"])
+    return config
+
+
 class SparkDataReader:
 
     def __init__(self, spark: SparkSession, config_path: str = None):
         self.spark_session = spark
-        self.config = self._load_config(config_path)
+        self.config = _load_config(config_path)
         self.data_path = self.config["iot_data_path"]
-
-    def _load_config(self, config_path: str = None) -> dict:
-        root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-        config_file_path = config_path or os.path.join(root, "config.yml")
-        with open(config_file_path, "r") as file:
-            config = yaml.safe_load(file)
-        config["iot_data_path"] = os.path.join(root, config["iot_data_path"])
-        return config
 
     def _read_file(self, full_path):
         df = self.spark_session.read.csv(full_path, header=False, inferSchema=True)

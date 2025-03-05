@@ -30,7 +30,7 @@ def aggregate_by_15min_windows(dfs):
     result.show(truncate=False)
 
 
-class CO2Analyzer:
+class Analyzer:
 
     def __init__(self, spark: SparkSession, reader):
         self.spark = spark

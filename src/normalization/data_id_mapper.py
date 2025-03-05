@@ -1,9 +1,24 @@
 import os
-
 import pandas as pd
 
 
-class Data_Id_Marker:
+def check_column(file, id_num):
+    return id_num in file.columns
+
+
+def write_data(data_files):
+    for path_csv in data_files:
+        df = pd.read_csv(path_csv)
+        id_num = os.path.basename(os.path.dirname(path_csv))
+        if not check_column(df, id_num):
+            df.insert(0, id_num, id_num)
+            df.to_csv(path_csv, index=False)
+            print(f"Document: [{path_csv}] - Operation Success")
+        else:
+            print(f"Document: [{path_csv}] - Already normalized")
+
+
+class DataIdMarker:
     def __init__(self, rootFolder):
         self.rootFolder = rootFolder
 
@@ -15,19 +30,3 @@ class Data_Id_Marker:
                     file_path = os.path.join(subdir, file)
                     csv_files.append(file_path)
         return csv_files
-
-    def write_data(self, data_files):
-        for path_csv in data_files:
-            df = pd.read_csv(path_csv)
-            id_num = os.path.basename(os.path.dirname(path_csv))
-            if not self.check_column(df, id_num):
-                df.insert(0, id_num, id_num)
-                df.to_csv(path_csv, index=False)
-                print(f"Document: [{path_csv}] - Operation Success")
-            else:
-                print(f"Document: [{path_csv}] - Already normalized")
-
-    def check_column(self, file, id_num):
-        if id_num in file.columns:
-            return True
-        return False

@@ -1,8 +1,8 @@
-from src.normalization.data_id_mapper import Data_Id_Marker
+from src.normalization.data_id_mapper import DataIdMarker, write_data
 
 try:
-    data_normalizer = Data_Id_Marker("data\IotData")
+    data_normalizer = DataIdMarker("data\IotData")
     csv_data = data_normalizer.read_data()
-    data_normalizer.write_data(csv_data)
+    write_data(csv_data)
 except Exception as e:
     print(f"Error: {e}")
