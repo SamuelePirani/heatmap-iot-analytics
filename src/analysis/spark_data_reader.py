@@ -3,7 +3,6 @@ from typing import List
 import yaml
 from concurrent.futures import ThreadPoolExecutor
 from pyspark.sql import SparkSession, DataFrame
-from pyspark.sql.functions import col
 
 
 class SparkDataReader:
@@ -22,15 +21,13 @@ class SparkDataReader:
         return config
 
     def _read_file(self, full_path):
-        print("start to read")
         df = self.spark_session.read.csv(full_path, header=False, inferSchema=True)
         base_name = os.path.splitext(os.path.basename(full_path))[0]
         column_names = ["ID_Room", "Timestamp", f"Value_{base_name}"]
         df = df.toDF(*column_names)
-        print("read")
         return df
 
-    def _read_files_in_subdir(self, subdir, files_with_suffix):
+    def _read_files_in_subdir(self, files_with_suffix):
         dfs = []
         for file_path in files_with_suffix:
             df = self._read_file(file_path)
@@ -40,18 +37,16 @@ class SparkDataReader:
     def read(self, file_suffix: str) -> List[List[DataFrame]]:
         rooms = []
         tasks = []
-        with ThreadPoolExecutor() as executor:
+        with ThreadPoolExecutor(max_workers=10) as executor:
             for subdir, _, files in os.walk(self.data_path):
                 files_with_suffix = [os.path.join(subdir, f) for f in files if f.endswith(file_suffix)]
                 if files_with_suffix:
-                    tasks.append(executor.submit(self._read_files_in_subdir, subdir, files_with_suffix))
+                    tasks.append(executor.submit(self._read_files_in_subdir, files_with_suffix))
             for task in tasks:
                 dfs = task.result()
                 if dfs:
                     rooms.append(dfs)
         return rooms
-
-
 
     """
     def read(self, file_suffix: str) -> List[List[DataFrame]]:
@@ -73,5 +68,3 @@ class SparkDataReader:
                 rooms.append(csv_files)
         return rooms
     """
-
-    
