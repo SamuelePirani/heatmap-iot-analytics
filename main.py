@@ -4,7 +4,7 @@ from pyspark.sql import SparkSession
 from src.analysis.analyzer import Analyzer
 from src.analysis.spark_data_reader import SparkDataReader
 from config.configuration_manager import ConfigurationManager
-from src.database.db_config import connect_to_db
+from src.normalization.mapper_invoker import invoke_normalization
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -18,14 +18,12 @@ def main():
         .getOrCreate()
     spark.sparkContext.setLogLevel("WARN")
     try:
-        logger.info("Connecting to DB...")
-        connect_to_db()
-        logger.info("Connected to DB")
         logger.info("Setup Environment...")
         config_manager = ConfigurationManager(os.path.join(os.getcwd(), "config.yml"))
         config_manager.setup_data_path_user()
         config = config_manager.get_config()
         logger.info("Setup Complete")
+        invoke_normalization(config)
         logger.info("Loading data...")
         reader = SparkDataReader(spark, config)
         analyzer = Analyzer(reader)

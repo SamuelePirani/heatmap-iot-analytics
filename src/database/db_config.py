@@ -12,3 +12,5 @@ def connect_to_db():
         client.admin.command('ping')
     except Exception as e:
         print("An error occurred:", e)
+
+
