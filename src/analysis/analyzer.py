@@ -1,7 +1,9 @@
-from typing import List
 from functools import reduce
+from typing import List
+
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import col, min, max, window, mean, round
+
 from src.analysis.analysis_preprocessor import run_preprocess
 
 

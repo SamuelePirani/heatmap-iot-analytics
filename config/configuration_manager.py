@@ -1,6 +1,8 @@
 import os
-import yaml
 import threading
+
+import yaml
+
 
 class SingletonMeta(type):
     _instances = {}
@@ -13,12 +15,12 @@ class SingletonMeta(type):
                 cls._instances[cls] = instance
         return cls._instances[cls]
 
+
 class ConfigurationManager(metaclass=SingletonMeta):
 
     def __init__(self, file_path):
         self.config_file = None
         self.config_path = file_path
-
 
     def setup_data_path_user(self):
         new_config = self.get_config()
@@ -30,14 +32,14 @@ class ConfigurationManager(metaclass=SingletonMeta):
         new_config["config_datapath"]["geoJson_data"] = geojson_datapath
 
         self.update_config(new_config)
-    
+
     def get_config(self):
         if self.config_file is None:
             self.read_config(self.config_path)
         return self.config_file
 
     def read_config(self, file_path):
-       with open(file_path, 'r') as file:
+        with open(file_path, 'r') as file:
             self.config_file = yaml.safe_load(file)
 
     def update_config(self, new_config):

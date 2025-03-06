@@ -1,9 +1,10 @@
 import os
-from typing import List
-from pyspark.sql.functions import printf
-import yaml
 from concurrent.futures import ThreadPoolExecutor
+from typing import List
+
+import yaml
 from pyspark.sql import SparkSession, DataFrame
+
 
 def _load_config(config_path: str = None) -> dict:
     root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
