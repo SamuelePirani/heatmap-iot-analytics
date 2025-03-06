@@ -1,7 +1,13 @@
 name: heatmap-analytics
 channels:
   - conda-forge
+  - anaconda
   - defaults
 dependencies:
-  - pyspark
+  - pyspark=3.5.4
   - pandas
+  - pyyaml
+  - openjdk=17.0.14
+  - python=3.9.21
+  - pymongo=4.11
+  - openssl
