@@ -1,20 +1,26 @@
-import logging
 import os
-
+import logging
 from pyspark.sql import SparkSession
-
-from config.configuration_manager import ConfigurationManager
 from src.analysis.analyzer import Analyzer
 from src.analysis.spark_data_reader import SparkDataReader
+from config.configuration_manager import ConfigurationManager
+from src.database.db_config import connect_to_db
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    level=logging.INFO
+)
 
 
 def main():
-    spark = SparkSession.builder.appName("HeatMapJob").getOrCreate()
+    spark = SparkSession.builder.appName("HeatMapJob") \
+        .getOrCreate()
     spark.sparkContext.setLogLevel("WARN")
     try:
+        logger.info("Connecting to DB...")
+        connect_to_db()
+        logger.info("Connected to DB")
         logger.info("Setup Environment...")
         config_manager = ConfigurationManager(os.path.join(os.getcwd(), "config.yml"))
         config_manager.setup_data_path_user()
