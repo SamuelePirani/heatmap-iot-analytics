@@ -37,9 +37,9 @@ class Analyzer:
         self.csv_dataframes: List[DataFrame] = reader.read(".csv")
 
     def run_analysis(self):
+        self.csv_dataframes = run_preprocess(self.csv_dataframes)
         for dfs in self.csv_dataframes:
-            prepared_dfs = run_preprocess(dfs)
-            aggregate_by_15min_windows(prepared_dfs)
+            aggregate_by_15min_windows(dfs)
             """
             for raw_df in self.csv_dataframes:
             prepared_df = self.prepare_dataframe(raw_df)

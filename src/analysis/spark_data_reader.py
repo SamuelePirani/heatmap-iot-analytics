@@ -1,25 +1,24 @@
 import os
 from typing import List
+from pyspark.sql.functions import printf
 import yaml
 from concurrent.futures import ThreadPoolExecutor
 from pyspark.sql import SparkSession, DataFrame
-
 
 def _load_config(config_path: str = None) -> dict:
     root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     config_file_path = config_path or os.path.join(root, "config.yml")
     with open(config_file_path, "r") as file:
         config = yaml.safe_load(file)
-    config["iot_data_path"] = os.path.join(root, config["iot_data_path"])
+    config["iot_data"] = os.path.join(root, config["iot_data"])
     return config
 
 
 class SparkDataReader:
 
-    def __init__(self, spark: SparkSession, config_path: str = None):
+    def __init__(self, spark: SparkSession, config):
         self.spark_session = spark
-        self.config = _load_config(config_path)
-        self.data_path = self.config["iot_data_path"]
+        self.config = config
 
     def _read_file(self, full_path):
         df = self.spark_session.read.csv(full_path, header=False, inferSchema=True)
@@ -39,7 +38,7 @@ class SparkDataReader:
         rooms = []
         tasks = []
         with ThreadPoolExecutor(max_workers=10) as executor:
-            for subdir, _, files in os.walk(self.data_path):
+            for subdir, _, files in os.walk(self.config["config_datapath"]["iot_data"]):
                 files_with_suffix = [os.path.join(subdir, f) for f in files if f.endswith(file_suffix)]
                 if files_with_suffix:
                     tasks.append(executor.submit(self._read_files_in_subdir, files_with_suffix))

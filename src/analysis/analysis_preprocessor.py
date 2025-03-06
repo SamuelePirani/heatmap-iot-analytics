@@ -6,9 +6,8 @@ def convert_timestamp_field(df: DataFrame) -> DataFrame:
     return df.withColumn("Timestamp", from_unixtime(col("Timestamp")).cast("timestamp"))
 
 
-def run_preprocess(dfs):
-    prepared_dfs = []
-    for df in dfs:
-        df = convert_timestamp_field(df)
-        prepared_dfs.append(df)
-    return prepared_dfs
+def run_preprocess(rooms):
+    for i, dfs in enumerate(rooms):
+        for j, df in enumerate(dfs):
+            rooms[i][j] = convert_timestamp_field(df)
+    return rooms
