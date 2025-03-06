@@ -1,9 +1,12 @@
-import os
 import logging
+import os
+
 from pyspark.sql import SparkSession
+
+from config.configuration_manager import ConfigurationManager
 from src.analysis.analyzer import Analyzer
 from src.analysis.spark_data_reader import SparkDataReader
-from config.configuration_manager import ConfigurationManager
+from src.database.db_config import connect_to_db
 from src.normalization.mapper_invoker import invoke_normalization
 
 logger = logging.getLogger(__name__)
@@ -18,6 +21,8 @@ def main():
         .getOrCreate()
     spark.sparkContext.setLogLevel("WARN")
     try:
+        connect_to_db()
+        logger.info("Connected to MongoDB")
         logger.info("Setup Environment...")
         config_manager = ConfigurationManager(os.path.join(os.getcwd(), "config.yml"))
         config_manager.setup_data_path_user()

@@ -1,75 +1,120 @@
-# Heat-map analytics
+# Heat-map Analytics
 
-The project is about developing an analytics pipeline to generate geo-located
-heat maps from time-series IoT data.
+This project develops an analytics pipeline to generate geo-located heat maps based on time-series IoT data.  
+In the time series, you will find temporal data about IoT events, while the geolocation information is stored
+separately.  
+Our objective is to integrate these two sources, aggregate data over time windows, and produce a geo-heat map
+visualization tool.
 
-## Problem Statement
+![Heat-map Visualization](docs/images/Figure1.png)
 
-The time series contains temporal
-information about IoT data events observed
-over time. The geolocation information of
-the source device is outside of this stream.
+---
 
-## Project Proposal
+## Table of Contents
 
-The aim is to develop an analytical pipeline
-to match time series with geo-location
-information and perform aggregation overt
-time windows. The final result is the
-development of a geo-heat map visualization
-tool.
+- [Prerequisites](#prerequisites)
+    - [JDK 17 Installation](#jdk-17-installation)
+    - [Conda Installation](#conda-installation)
+- [Environment Setup](#environment-setup)
+    - [Cloning the Repository](#cloning-the-repository)
+    - [Creating/Updating the Conda Environment](#creating-updating-the-conda-environment)
+    - [Configuring MongoDB Connection Variables](#configuring-mongodb-connection-variables)
+    - [Activating the Environment](#activating-the-environment)
+- [Running the Application](#running-the-application)
+- [Additional Notes](#additional-notes)
 
-![img.png](docs/images/Figure1.png)
+---
 
-## Project Requisites and Environment Setup
-
-This project uses [Conda](https://docs.conda.io/en/latest/) to manage its dependencies and ensure a consistent
-development environment across different machines.
+## Prerequisites
 
 ### JDK 17 Installation
 
-Since the analytics in this project rely on Java-based components, a Java Development Kit (JDK) version 17 or later is
-required. Here’s how you can install it:
+The project relies on Java-based components. To install JDK 17 or later:
 
-1. Visit the official website of your preferred JDK distributor. For instance, you can use:
+1. Visit the official website of your preferred JDK distributor. For example, you can use:
     - [Oracle JDK 17 Downloads](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
-2. Download the installer for your operating system and follow the provided steps to complete the installation.
-3. Once installed, verify your Java installation by running:
+2. Download and run the installer for your operating system.
+3. Verify the installation by running:
    ```bash
    java --version
    ```
-4. Ensure that the `JAVA_HOME` environment variable is set to the path of your JDK 17 installation.
+4. Ensure that the `JAVA_HOME` environment variable is correctly set to your JDK installation path.
 
 ### Conda Installation
 
-If you don't have Conda installed, please download and install [Anaconda](https://www.anaconda.com/download) following
-the instructions from the respective website.
-Make sure that Conda has been added to the PATH variables of your system, otherwise do it manually.
+If you do not have Conda installed:
 
-### Setting Up the Environment
+1. Download and install [Anaconda](https://www.anaconda.com/download) by following the instructions on the website.
+2. Confirm that Conda is added to your system's PATH or configure it manually.
 
-After cloning the repository, you can set up your development environment by creating a Conda environment from the
-provided `environment.yml` file. Open your terminal or command prompt, navigate to the project directory, and run:
+---
+
+## Environment Setup
+
+### Cloning the Repository
+
+Clone the project repository to your local machine:
 
 ```bash
-conda env create -f environment.yml
+git clone https://github.com/SamuelePirani/HeatMap---TBDM2425.git
+cd HeatMap---TBDM2425
 ```
 
-If you already have an environment that you wish to update with the latest dependencies from the `environment.yml` file,
-run:
+### Creating/Updating the Conda Environment
+
+Use the provided `environment.yml` file to create (or update) the Conda environment with all necessary dependencies:
+
+- **Creating the environment:**
+
+  ```bash
+  conda env create -f environment.yml
+  ```
+
+- **Updating an existing environment:**
+
+  ```bash
+  conda env update -f environment.yml --prune
+  ```
+
+### Configuring MongoDB Connection Variables
+
+The project uses environment variables to configure the MongoDB connection. After creating or updating your Conda
+environment, set the appropriate variables using the following commands:
 
 ```bash
-conda env update --file environment.yml --prune
+conda env config vars set MONGO_PASSWORD="your_password"
+conda env config vars set MONGO_USERNAME="your_username"
+conda env config vars set MONGO_URL="your_url"
 ```
 
-### Activating the Environment
-
-Once the environment is created or updated, activate it with the following command (replace `<env_name>` with the name
-specified in the `environment.yml` file):
+After setting these variables, it is important to deactivate and then reactivate your environment to apply the changes:
 
 ```bash
+conda deactivate
 conda activate heatmap-analytics
 ```
 
-Following these steps ensures that all required dependencies, including those needed for data processing and analytics,
-are correctly installed and configured.
+---
+
+## Running the Application
+
+With the environment activated and all dependencies installed, run the main application:
+
+```bash
+python main.py
+```
+
+---
+
+## Additional Notes
+
+- **IDE Configuration:** If you use an IDE like PyCharm, make sure its interpreter is set to the correct Conda
+  environment. Some IDEs may not automatically import the environment variables set via Conda; in this case, configure
+  them manually in the run configurations.
+- **Troubleshooting:**  
+  If you encounter errors related to MongoDB connection (e.g., "Invalid URI host: none is not a valid hostname"),
+  double-check that all MongoDB-related variables (`MONGO_PASSWORD`, `MONGO_USERNAME`, `MONGO_URL`) are correctly
+  configured and loaded in your environment.
+
+Follow these guidelines to ensure that all required dependencies and configurations for data processing and analytics
+are properly set. Enjoy exploring your new analytics pipeline!
