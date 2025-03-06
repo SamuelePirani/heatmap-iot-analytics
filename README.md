@@ -1,9 +1,9 @@
 # Heat-map Analytics
 
-This project develops an analytics pipeline to generate geo-located heat maps based on time-series IoT data.  
+This project develops an analytics pipeline to generate geolocated heat maps based on time-series IoT data.  
 In the time series, you will find temporal data about IoT events, while the geolocation information is stored
 separately.  
-Our objective is to integrate these two sources, aggregate data over time windows, and produce a geo-heat map
+Our goal is to integrate these two sources, aggregate data over time windows, and produce a geo-heat map
 visualization tool.
 
 ![Heat-map Visualization](docs/images/Figure1.png)
@@ -44,7 +44,7 @@ The project relies on Java-based components. To install JDK 17 or later:
 If you do not have Conda installed:
 
 1. Download and install [Anaconda](https://www.anaconda.com/download) by following the instructions on the website.
-2. Confirm that Conda is added to your system's PATH or configure it manually.
+2. Confirm that Conda is added to your system’s PATH or configure it manually.
 
 ---
 
@@ -111,9 +111,10 @@ python main.py
   environment. Some IDEs may not automatically import the environment variables set via Conda; in this case, configure
   them manually in the run configurations.
 - **Troubleshooting:**  
-  If you encounter errors related to MongoDB connection (e.g., "Invalid URI host: none is not a valid hostname"),
+  If you encounter errors related to MongoDB connection (for example, "Invalid URI host: none is not a valid hostname"),
   double-check that all MongoDB-related variables (`MONGO_PASSWORD`, `MONGO_USERNAME`, `MONGO_URL`) are correctly
   configured and loaded in your environment.
 
 Follow these guidelines to ensure that all required dependencies and configurations for data processing and analytics
-are properly set. Enjoy exploring your new analytics pipeline!
+are set.
+Enjoy exploring your new analytics pipeline!
