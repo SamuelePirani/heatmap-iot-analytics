@@ -19,7 +19,6 @@ visualization tool.
     - [Cloning the Repository](#cloning-the-repository)
     - [Creating/Updating the Conda Environment](#creating-updating-the-conda-environment)
     - [Configuring MongoDB Connection Variables](#configuring-mongodb-connection-variables)
-    - [Activating the Environment](#activating-the-environment)
 - [Running the Application](#running-the-application)
 - [Additional Notes](#additional-notes)
 
