@@ -9,7 +9,7 @@ from pyspark.sql import SparkSession, DataFrame
 def _load_config(config_path: str = None) -> dict:
     root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     config_file_path = config_path or os.path.join(root, "config.yml")
-    with open(config_file_path, "r") as file:
+    with open(config_file_path) as file:
         config = yaml.safe_load(file)
     config["iot_data"] = os.path.join(root, config["iot_data"])
     return config
