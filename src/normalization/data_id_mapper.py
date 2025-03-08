@@ -1,33 +1,46 @@
+import logging
 import os
 
 import pandas as pd
 
-
-def check_column(file, id_num):
-    return id_num in file.columns
+logger = logging.getLogger(__name__)
 
 
-def write_data(data_files):
-    for path_csv in data_files:
-        df = pd.read_csv(path_csv)
-        id_num = os.path.basename(os.path.dirname(path_csv))
-        if not check_column(df, id_num):
-            df.insert(0, id_num, id_num)
-            df.to_csv(path_csv, index=False)
-            print(f"Document: [{path_csv}] - Operation Success")
-        else:
-            print(f"Document: [{path_csv}] - Already normalized")
+class DataIdMapper:
+    def __init__(self, root_folder: str) -> None:
+        self.root_folder = root_folder
 
+    @staticmethod
+    def _has_id_column(df: pd.DataFrame, id_num: str) -> bool:
+        return id_num in df.columns
 
-class DataIdMarker:
-    def __init__(self, rootFolder):
-        self.rootFolder = rootFolder
+    def _normalize_file(self, file_path: str) -> None:
+        try:
+            df = pd.read_csv(file_path)
+            id_num = os.path.basename(os.path.dirname(file_path))
+            if not self._has_id_column(df, id_num):
+                df.insert(0, id_num, id_num)
+                df.to_csv(file_path, index=False)
+                logger.info(f"Normalized file: {file_path}")
+            else:
+                logger.info(f"File already normalized: {file_path}")
+        except Exception as e:
+            logger.error(f"Error normalizing file {file_path}: {e}")
+            raise
 
-    def read_data(self):
+    def read_csv_files(self) -> list:
         csv_files = []
-        for subdir, dirs, files in os.walk(self.rootFolder):
+        for subdir, _, files in os.walk(self.root_folder):
             for file in files:
                 if file.endswith(".csv"):
-                    file_path = os.path.join(subdir, file)
-                    csv_files.append(file_path)
+                    csv_files.append(os.path.join(subdir, file))
         return csv_files
+
+    def normalize_all(self) -> None:
+        csv_files = self.read_csv_files()
+        if not csv_files:
+            logger.warning(f"No CSV files found under {self.root_folder}")
+            return
+
+        for file_path in csv_files:
+            self._normalize_file(file_path)

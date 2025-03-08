@@ -1,23 +1,17 @@
 import logging
 
-from src.normalization.data_id_mapper import DataIdMarker, write_data
+from src.normalization.data_id_mapper import DataIdMapper
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    level=logging.INFO
-)
+logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message)s", level=logging.INFO)
 
 
-def invoke_normalization(config_file):
-    try:
-        if config_file["is_normalized"] is not True:
-            data_normalizer = DataIdMarker(config_file["config_datapath"]["iot_data"])
-            logger.info("Start Data Normalization...")
-            csv_data = data_normalizer.read_data()
-            write_data(csv_data)
-            logger.info("Data Normalization Complete")
-        else:
-            logger.info("Data already normalized")
-    except Exception as e:
-        print(f"Error: {e}")
+def invoke_normalization(config: dict) -> None:
+    if not config.get("is_normalized", False):
+        iot_data_path = config["config_datapath"]["iot_data"]
+        logger.info("Starting data normalization process...")
+        data_mapper = DataIdMapper(iot_data_path)
+        data_mapper.normalize_all()
+        logger.info("Data normalization complete")
+    else:
+        logger.info("Data already normalized")
