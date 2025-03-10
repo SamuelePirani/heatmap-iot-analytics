@@ -20,11 +20,6 @@ def setup_spark():
     return spark
 
 
-def setup_database():
-    client = connect_to_db()
-    return client
-
-
 def load_configuration(config_path: str):
     logger.info("Setting up configuration...")
     config_manager = ConfigurationManager(config_path)
@@ -41,14 +36,14 @@ def run_normalization(config: dict):
         raise
 
 
-def load_and_analyze(spark, config: dict):
+def load_and_analyze(spark, config: dict, client):
     try:
         logger.info("Loading data...")
         reader = SparkDataReader(spark, config)
         analyzer = Analyzer(reader)
         logger.info("Data loading complete")
         logger.info("Running analysis...")
-        analyzer.run_analysis(config["intervals"])
+        analyzer.run_analysis(config["intervals"], client, config["config_datapath"]["geoJson_data"])
         logger.info("Analysis complete")
     except Exception as e:
         logger.error(f"Error during loading or analysis: {e}")
@@ -65,11 +60,11 @@ def main():
     spark = None
     try:
         spark = setup_spark()
-        setup_database()
+        client = connect_to_db()
         config_path = os.path.join(os.getcwd(), "config.yml")
         config = load_configuration(config_path)
         run_normalization(config)
-        load_and_analyze(spark, config)
+        load_and_analyze(spark, config, client)
     except Exception as e:
         logger.error(f"Execution failed: {e}")
     finally:

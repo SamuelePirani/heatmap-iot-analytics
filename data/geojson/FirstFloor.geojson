@@ -116,7 +116,7 @@
          "properties":{
             "type":"Room",
             "name":"LA2",
-            "room_id":"417",
+            "room_id":417,
             "description":"TeamLab - Polo A"
          },
          "geometry":{
@@ -153,7 +153,7 @@
          "properties":{
             "type":"Room",
             "name":"AA3",
-            "room_id":"419",
+            "room_id":419,
             "description":"Aula AA3 - Polo A"
          },
          "geometry":{
@@ -184,6 +184,66 @@
             "type":"Polygon"
          },
          "id":4
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "type":"Sensor",
+            "room_id":413
+         },
+         "geometry":{
+            "coordinates":[
+               13.068577090069681,
+               43.139542239205156
+            ],
+            "type":"Point"
+         },
+         "id":5
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "type":"Sensor",
+            "room_id":417
+         },
+         "geometry":{
+            "coordinates":[
+               13.068644358679506,
+               43.13947502330501
+            ],
+            "type":"Point"
+         },
+         "id":6
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "type":"Sensor",
+            "room_id":415
+         },
+         "geometry":{
+            "coordinates":[
+               13.06886131509637,
+               43.139677555201956
+            ],
+            "type":"Point"
+         },
+         "id":7
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "type":"Sensor",
+            "room_id":419
+         },
+         "geometry":{
+            "coordinates":[
+               13.068971005353006,
+               43.1396289122311
+            ],
+            "type":"Point"
+         },
+         "id":8
       }
    ]
 }
