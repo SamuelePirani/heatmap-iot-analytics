@@ -1,8 +1,11 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule, provideClientHydration, withEventReplay } from '@angular/platform-browser';
-
-import { AppRoutingModule } from './app-routing.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserModule, provideClientHydration, withEventReplay } from '@angular/platform-browser'
 import { AppComponent } from './app.component';
+import { NbThemeModule, NbSidebarModule, NbLayoutModule, NbButtonModule } from '@nebular/theme';
+
+
+
 
 @NgModule({
   declarations: [
@@ -10,7 +13,11 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    BrowserAnimationsModule,
+    NbThemeModule.forRoot({name:'dark'}),
+    NbLayoutModule,
+    NbSidebarModule.forRoot(),
+    NbButtonModule
   ],
   providers: [
     provideClientHydration(withEventReplay())
