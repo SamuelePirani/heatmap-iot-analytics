@@ -16,7 +16,7 @@ def connect_to_db():
            "?retryWrites=true&w=majority&appName=TBDM-Heatmap-DB")
 
     try:
-        client = MongoClient(uri, server_api=ServerApi('1'), socketTimeoutMS=5000, connectTimeoutMS=5000)
+        client = MongoClient(uri, server_api=ServerApi('1'), socketTimeoutMS=50000, connectTimeoutMS=50000)
         client.admin.command('ping')
         logger.info("Successfully connected to MongoDB.")
         return client
