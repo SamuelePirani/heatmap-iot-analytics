@@ -32,7 +32,7 @@ def aggregate_single_dataframe(df: DataFrame, minutes: int) -> DataFrame:
             .withColumn("End", col("window.end")).drop("window"))
 
 
-def aggregate_by_minute_window(dfs: List[DataFrame], minutes: int):
+def aggregate_by_minute_window(dfs: List[DataFrame], minutes: int, room_map):
     logger.info(f"Start aggregation for {minutes} minute window - Room {dfs[0].select('ID_Room').first()}")
     aggregated_list = []
     with ThreadPoolExecutor(max_workers=5) as executor:
@@ -46,52 +46,59 @@ def aggregate_by_minute_window(dfs: List[DataFrame], minutes: int):
         raise ValueError("No aggregations were performed due to errors or invalid data.")
     result = reduce(lambda left, right: left.join(right, on=["Id_Room", "Start", "End"], how="outer"), aggregated_list)
     logger.info(f"Aggregation for {minutes} minutes is completed")
+    try:
+        result = result.withColumn("Id_Room", col("Id_Room").cast("string"))
+        result = result.replace(room_map, subset=['Id_Room'])
+    except Exception as e:
+        logger.error(f"Error during room name replacement: {e}")
     return result
 
 
-def store_single_geojson_to_db(rooms_map, floor, mongo_client, data_path):
-    logger.info(f"Creating {floor} GeoJSON")
-    path = data_path + f"/{floor}.geojson"
-    with open(path, "r") as f:
-        geojson_data = load(f)
-        for feature in geojson_data["features"]:
-            if not feature["geometry"]["type"] == "Point":
-                continue
-            room_id = feature["properties"]["room_id"]
-            logger.info("\tRoom ID: " + str(room_id))
-            dfs = rooms_map[room_id]
-            feature["properties"]["data"] = []
-            for i in range(0, 2):
-                feature["properties"]["data"].append(
-                    {
-                        '30' if i == 0 else '60': dfs[i].drop("Id_Room").toJSON().collect()
-                    }
-                )
-                logger.info(f"\t\tInterval {30 if i == 0 else 60} for room {room_id} has been added to geojson")
-    logger.info("Geojson for " + floor + " has been created")
-    db = mongo_client["geojson_db"]
-    collection = db[f"{floor}_geojson"]
-
-    collection.delete_many({})
-    collection.insert_one({"type": "FeatureCollection", "features": geojson_data["features"]})
-
-    logger.info(f"GeoJSON for {floor} successfully saved to MongoDB")
-
-
-def store_geojson_to_db(rooms_map, mongo_client, data_path):
-    store_single_geojson_to_db(rooms_map, 'FirstFloor', mongo_client, data_path)
-    store_single_geojson_to_db(rooms_map, 'SecondFloor', mongo_client, data_path)
-
-
-def update_rooms_to_analyze(rooms_to_analyze, geojson_filename):
+def update_rooms_to_analyze(rooms_to_analyze, room_map, geojson_filename):
     with open(f'./data/geojson/{geojson_filename}', "r") as f:
         geojson_data = load(f)
         for feature in geojson_data["features"]:
             if not feature["geometry"]["type"] == "Point":
                 continue
-            rooms_to_analyze.append(feature["properties"]["room_id"])
-    f.close()
-    return rooms_to_analyze
+            hotel_room = feature["properties"]["hotel_room_id"]
+            room_map[str(hotel_room)] = feature['properties']['room']
+            rooms_to_analyze.add(hotel_room)
+        f.close()
+    return rooms_to_analyze, room_map
+
+
+def save_to_mongodb(intervals_analyzed, client):
+    db = client.sensor_analysis
+    logger.info("Starting MongoDB insertion")
+    for interval, dataframes in intervals_analyzed.items():
+        collection = db[f"interval_{interval}"]
+        rooms_dict = {}
+        logger.info(f"Processing interval: {interval}")
+
+        for dataframe in dataframes:
+            rows = dataframe.collect()
+            for row in rows:
+                room_name = row["Id_Room"]
+                if room_name not in rooms_dict:
+                    rooms_dict[room_name] = {"room": room_name, "data": []}
+                entry = {
+                    "start": row["Start"],
+                    "end": row["End"],
+                    "sensors": []
+                }
+                for sensor in ["co2", "humidity", "light", "pir", "temperature"]:
+                    mean_key, min_key, max_key = f"{sensor}_mean", f"{sensor}_min", f"{sensor}_max"
+                    if row[mean_key] is not None:
+                        entry["sensors"].append({
+                            "type": sensor,
+                            "mean": row[mean_key],
+                            "min": row[min_key],
+                            "max": row[max_key]
+                        })
+                rooms_dict[room_name]["data"].append(entry)
+        collection.insert_many(list(rooms_dict.values()))
+        logger.info(f"Inserted data for interval {interval} into MongoDB")
+    logger.info("Finished MongoDB insertion")
 
 
 class Analyzer:
@@ -100,22 +107,23 @@ class Analyzer:
 
     def run_analysis(self, intervals: List[int], client, data_path) -> None:
         self.dataframe_groups = run_preprocess(self.dataframe_groups)
-        rooms_to_analyze = []
-        rooms_to_analyze = update_rooms_to_analyze(
-            update_rooms_to_analyze(rooms_to_analyze, 'FirstFloor.geojson'),
+        rooms_to_analyze, room_map = update_rooms_to_analyze(
+            set(),
+            dict(),
+            'FirstFloor.geojson'
+        )
+        rooms_to_analyze, room_map = update_rooms_to_analyze(
+            rooms_to_analyze,
+            room_map,
             'SecondFloor.geojson'
         )
-        d = dict()
+        intervals_analyzed = dict()
+        for interval in intervals:
+            intervals_analyzed[interval] = []
         for group in self.dataframe_groups:
             if group[0].select("Id_Room").first()["Id_Room"] not in rooms_to_analyze:
                 continue
-            windows = []
-            room_id = None
             for interval in intervals:
-                aggregated = aggregate_by_minute_window(group, interval)
-                if not room_id:
-                    room_id = aggregated.first()["Id_Room"]
-                windows.append(aggregated)
-            d[room_id] = windows
-        logger.info("Updating geojson with analyzed data")
-        store_geojson_to_db(d, client, data_path)
+                aggregated = aggregate_by_minute_window(group, interval, room_map)
+                intervals_analyzed[interval].append(aggregated)
+        save_to_mongodb(intervals_analyzed, client)
