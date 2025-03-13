@@ -2,6 +2,7 @@ import {Component, Inject, PLATFORM_ID} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {isPlatformBrowser} from '@angular/common';
 import GeoJSON from 'ol/format/GeoJSON';
+import {DataService} from "./data.service";
 
 interface Floor {
     id: string;
@@ -29,7 +30,8 @@ export class AppComponent {
 
     constructor(
         @Inject(PLATFORM_ID) private readonly platformId: object,
-        private readonly http: HttpClient
+        private readonly http: HttpClient,
+        private readonly dataService: DataService
     ) {
         this.isBrowser = isPlatformBrowser(this.platformId);
         this.fetchRooms(this.selectedFloor);
