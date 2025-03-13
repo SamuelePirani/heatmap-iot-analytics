@@ -70,22 +70,23 @@ def update_rooms_to_analyze(rooms_to_analyze, room_map, geojson_filename):
 def save_to_mongodb(intervals_analyzed, client):
     db = client.sensor_analysis
     logger.info("Starting MongoDB insertion")
+
     for interval, dataframes in intervals_analyzed.items():
         collection = db[f"interval_{interval}"]
-        rooms_dict = {}
+        documents = []
+
         logger.info(f"Processing interval: {interval}")
 
         for dataframe in dataframes:
             rows = dataframe.collect()
             for row in rows:
-                room_name = row["Id_Room"]
-                if room_name not in rooms_dict:
-                    rooms_dict[room_name] = {"room": room_name, "data": []}
                 entry = {
                     "start": row["Start"],
                     "end": row["End"],
+                    "room_name": row["Id_Room"],
                     "sensors": []
                 }
+
                 for sensor in ["co2", "humidity", "light", "pir", "temperature"]:
                     mean_key, min_key, max_key = f"{sensor}_mean", f"{sensor}_min", f"{sensor}_max"
                     if row[mean_key] is not None:
@@ -95,9 +96,13 @@ def save_to_mongodb(intervals_analyzed, client):
                             "min": row[min_key],
                             "max": row[max_key]
                         })
-                rooms_dict[room_name]["data"].append(entry)
-        collection.insert_many(list(rooms_dict.values()))
-        logger.info(f"Inserted data for interval {interval} into MongoDB")
+
+                documents.append(entry)
+
+        if documents:
+            collection.insert_many(documents)
+            logger.info(f"Inserted {len(documents)} documents for interval {interval} into MongoDB")
+
     logger.info("Finished MongoDB insertion")
 
 
