@@ -3,6 +3,8 @@ import {HttpClient} from '@angular/common/http';
 import {isPlatformBrowser} from '@angular/common';
 import GeoJSON from 'ol/format/GeoJSON';
 import {DataService} from "./data.service";
+import {LoginComponent} from './login/login.component';
+import {NbDialogService} from '@nebular/theme';
 
 interface Floor {
     id: string;
@@ -31,7 +33,8 @@ export class AppComponent {
     constructor(
         @Inject(PLATFORM_ID) private readonly platformId: object,
         private readonly http: HttpClient,
-        private readonly dataService: DataService
+        private readonly dataService: DataService,
+        private dialogService: NbDialogService
     ) {
         this.isBrowser = isPlatformBrowser(this.platformId);
         this.fetchRooms(this.selectedFloor);
@@ -51,4 +54,9 @@ export class AppComponent {
         this.selectedRoom = '';
         this.fetchRooms(newFloorUrl);
     }
+
+  openLoginModal(): void {
+    this.dialogService.open(LoginComponent);
+  }
+
 }

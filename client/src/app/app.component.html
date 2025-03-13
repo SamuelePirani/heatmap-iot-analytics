@@ -41,6 +41,20 @@
                 </nb-select>
             </label>
 
+          <label class="sel-item" for="sel-sensor">
+            SENSOR TYPE
+            <nb-select
+              id="sel-sensor"
+              placeholder="Choose sensor type"
+            >
+              <nb-option value="0">CO2</nb-option>
+              <nb-option value="1">TEMPERATURE</nb-option>
+              <nb-option value="2">PIR</nb-option>
+              <nb-option value="3">LIGHT</nb-option>
+              <nb-option value="4">HUMIDITY</nb-option>
+            </nb-select>
+          </label>
+
             <label class="sel-item" for="sel-room">
                 ROOM
                 <nb-select
@@ -57,19 +71,7 @@
                 </nb-select>
             </label>
 
-            <label class="sel-item" for="sel-sensor">
-                SENSOR TYPE
-                <nb-select
-                        id="sel-sensor"
-                        placeholder="Choose sensor type"
-                >
-                    <nb-option value="0">CO2</nb-option>
-                    <nb-option value="1">TEMPERATURE</nb-option>
-                    <nb-option value="2">PIR</nb-option>
-                    <nb-option value="3">LIGHT</nb-option>
-                    <nb-option value="4">HUMIDITY</nb-option>
-                </nb-select>
-            </label>
+            <button nbButton status="basic" (click)="openLoginModal()"> Setting </button>
 
         </div>
     </nb-sidebar>
