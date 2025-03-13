@@ -1,4 +1,4 @@
-import {Component, Inject, Input, PLATFORM_ID} from '@angular/core';
+import {Component, Inject, Input, OnChanges, PLATFORM_ID, SimpleChanges,} from '@angular/core';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
@@ -12,86 +12,86 @@ import {Fill, Stroke, Style, Text} from 'ol/style';
     selector: 'app-heatmap',
     standalone: false,
     templateUrl: './heatmap.component.html',
-    styleUrl: './heatmap.component.scss'
+    styleUrls: ['./heatmap.component.scss'],
 })
-export class HeatmapComponent {
+export class HeatmapComponent implements OnChanges {
     @Input() geoJsonUrl!: string;
-    map!: Map;
-    vectorSource!: VectorSource;
 
-    constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    private map?: Map;
+    private vectorSource?: VectorSource;
+
+    constructor(@Inject(PLATFORM_ID) private readonly platformId: object) {
     }
 
-    ngOnChanges(): void {
-        if (this.map) {
-            this.updateHeatmap();
-        } else {
-            this.initializeMap();
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['geoJsonUrl']) {
+            if (this.map) {
+                this.updateHeatmap();
+            } else {
+                this.initializeMap();
+            }
         }
     }
 
-    initializeMap(): void {
+    private initializeMap(): void {
         this.vectorSource = new VectorSource({
             url: this.geoJsonUrl,
             format: new GeoJSON(),
         });
 
-        const vectorLayer = this.layoutCreation();
+        const vectorLayer = this.createVectorLayer();
 
         this.map = new Map({
             target: 'heatmap',
             layers: [
-                new TileLayer({
-                    source: new OSM(),
-                }),
-                vectorLayer
+                new TileLayer({source: new OSM()}),
+                vectorLayer,
             ],
             view: new View({
                 center: [0, 0],
                 zoom: 2,
+                minZoom: 19,
+                maxZoom: 21,
             }),
         });
 
-
         this.vectorSource.once('change', () => {
-            if (this.vectorSource.getFeatures().length > 0) {
+            const features = this.vectorSource?.getFeatures() ?? [];
+            if (features.length > 0) {
+                // @ts-ignore
                 const extent = this.vectorSource.getExtent();
-                this.map.getView().fit(extent, {padding: [20, 20, 20, 20], maxZoom: 20});
+                this.map?.getView().fit(extent, {
+                    padding: [20, 20, 20, 20],
+                    maxZoom: 21,
+                });
             }
         });
     }
 
-    layoutCreation(): VectorLayer {
+    private createVectorLayer(): VectorLayer {
         return new VectorLayer({
             source: this.vectorSource,
-            style: (feature) => {
-                return new Style({
-                    fill: new Fill({
-                        color: 'rgba(0,0,0,0.1)',
-                    }),
+            style: (feature) => new Style({
+                fill: new Fill({color: 'rgba(0,0,0,0.1)'}),
+                stroke: new Stroke({
+                    color: '#000000',
+                    width: 2,
+                }),
+                text: new Text({
+                    text: feature.get('type') === 'Room' ? feature.get('name') || '' : '',
+                    font: '14px Arial',
+                    fill: new Fill({color: '#000'}),
                     stroke: new Stroke({
-                        color: '#000000',
+                        color: '#fff',
                         width: 2,
                     }),
-                    text: new Text({
-                        text: feature.get('type') === 'Room' ? feature.get('name') : '',
-                        font: '14px Arial',
-                        fill: new Fill({
-                            color: '#000',
-                        }),
-                        stroke: new Stroke({
-                            color: '#fff',
-                            width: 2,
-                        }),
-                    }),
-                });
-            },
+                }),
+            }),
         });
     }
 
-
-    updateHeatmap(): void {
-        this.vectorSource.setUrl(this.geoJsonUrl);
-        this.vectorSource.refresh();
+    private updateHeatmap(): void {
+        this.vectorSource?.setUrl(this.geoJsonUrl);
+        this.vectorSource?.refresh();
     }
 }
