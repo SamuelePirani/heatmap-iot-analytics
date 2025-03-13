@@ -1,0 +1,25 @@
+.sel-items-box{
+  display: flex;
+  align-content: flex-start;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sel-item{
+  display: flex;
+  align-content: flex-start;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.header-layout{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-header{
+  width: 50px; /* Larghezza dell'immagine (puoi adattarla) */
+  height: auto; /* Mantiene le proporzioni */
+  margin-right: 10px;
+}

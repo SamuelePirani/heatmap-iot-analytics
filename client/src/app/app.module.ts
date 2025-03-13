@@ -2,25 +2,29 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule, provideClientHydration, withEventReplay } from '@angular/platform-browser'
 import { AppComponent } from './app.component';
-import { NbThemeModule, NbSidebarModule, NbLayoutModule, NbButtonModule } from '@nebular/theme';
-
-
-
+import { NbThemeModule, NbSidebarModule, NbLayoutModule, NbButtonModule, NbSelectModule } from '@nebular/theme';
+import { HeatmapComponent } from './heatmap/heatmap.component';
+import { provideHttpClient } from '@angular/common/http';
+import {NgOptimizedImage} from '@angular/common';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HeatmapComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    NbThemeModule.forRoot({name:'dark'}),
+    NbThemeModule.forRoot({name: 'dark'}),
     NbLayoutModule,
+    NbSelectModule,
     NbSidebarModule.forRoot(),
-    NbButtonModule
+    NbButtonModule,
+    NgOptimizedImage,
   ],
   providers: [
-    provideClientHydration(withEventReplay())
+    provideClientHydration(withEventReplay()),
+    provideHttpClient()
   ],
   bootstrap: [AppComponent]
 })

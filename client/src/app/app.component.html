@@ -1,9 +1,58 @@
 <nb-layout>
-  <nb-layout-header fixed>Company Name</nb-layout-header>
+  <nb-layout-header fixed>
 
-  <nb-sidebar>Sidebar Content</nb-sidebar>
+    <div class="header-layout">
+      <img src="assets/unicamLogo.png" class="logo-header" alt="Descrizione dell'immagine">
+      <h5> Unicam Pole - Heatmap Analytic </h5>
+    </div>
+  </nb-layout-header>
+
+  <nb-sidebar>
+    <div class="sel-items-box">
+
+      <div class="sel-item">
+        <label for="sel-floor"> FLOOR </label>
+        <nb-select id="sel-floor" placeholder="Choose a floor" [(selected)]="selectedFloor"  (selectedChange)="onFloorChange($event)">
+          <nb-option *ngFor="let floor of floors" [value]="floor.geoJsonUrl">
+            {{ floor.name }}
+          </nb-option>
+        </nb-select>
+      </div>
+
+      <div class="sel-item">
+        <label for="sel-int"> TIME INTERVAL </label>
+        <nb-select id="sel-int" placeholder="Choose time intervals">
+          <nb-option value="0"> 30 minutes </nb-option>
+          <nb-option value="1"> 1 hour </nb-option>
+        </nb-select>
+      </div>
+
+      <div class="sel-item">
+        <label for="sel-room"> ROOM </label>
+        <nb-select id="sel-room" placeholder="Choose room" [(selected)]="selectedRoom">
+          <nb-option *ngFor="let room of rooms" [value]="room">
+            {{ room }}
+          </nb-option>
+        </nb-select>
+      </div>
+
+      <div class="sel-item">
+        <label for="sel-sensor"> SENSOR TYPE </label>
+        <nb-select id="sel-sensor" placeholder="Choose sensor type">
+          <nb-option value="0"> CO2 </nb-option>
+          <nb-option value="1"> TEMPERATURE </nb-option>
+          <nb-option value="2"> PIR </nb-option>
+          <nb-option value="3"> LIGHT </nb-option>
+          <nb-option value="4"> HUMIDITY </nb-option>
+        </nb-select>
+      </div>
+
+    </div>
+
+
+  </nb-sidebar>
 
   <nb-layout-column>
-    Page Content <button nbButton>Hello World</button>
+    <app-heatmap *ngIf="isBrowser" [geoJsonUrl]="selectedFloor"></app-heatmap>
   </nb-layout-column>
 </nb-layout>
