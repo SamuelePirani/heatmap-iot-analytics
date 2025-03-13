@@ -1,25 +1,31 @@
-.sel-items-box {
+$gap-large: 24px;
+$gap-small: 4px;
+$header-gap: 8px;
+$logo-size: 48px;
+
+@mixin flex-column($gap: 0) {
   display: flex;
   align-content: flex-start;
   flex-direction: column;
-  gap: 24px;
+  gap: $gap;
+}
+
+.sel-items-box {
+  @include flex-column($gap-large);
 }
 
 .sel-item {
-  display: flex;
-  align-content: flex-start;
-  flex-direction: column;
-  gap: 4px;
+  @include flex-column($gap-small);
 }
 
 .header-layout {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: $header-gap;
 }
 
 .logo-header {
-  width: 50px;
+  width: $logo-size;
   height: auto;
-  margin-right: 10px;
+  margin-right: $header-gap;
 }
