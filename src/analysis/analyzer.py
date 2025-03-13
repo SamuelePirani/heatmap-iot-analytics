@@ -110,7 +110,7 @@ class Analyzer:
     def __init__(self, reader) -> None:
         self.dataframe_groups: List[List[DataFrame]] = reader.read(".csv")
 
-    def run_analysis(self, intervals: List[int], client, data_path) -> None:
+    def run_analysis(self, intervals: List[int], client) -> None:
         self.dataframe_groups = run_preprocess(self.dataframe_groups)
         rooms_to_analyze, room_map = update_rooms_to_analyze(
             set(),
