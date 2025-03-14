@@ -33,9 +33,6 @@ def main():
 
     @app.route('/range')
     def get_range():
-        interval = request.args.get('interval')
-        if int(interval) not in [30, 60]:
-            return jsonify({"error": f"Invalid interval. Only 30 and 60 are allowed, got {interval}"}), 400
         pipeline = [
             {
                 "$group": {
@@ -45,7 +42,7 @@ def main():
                 }
             }
         ]
-        return jsonify(list(db[f'interval_{interval}'].aggregate(pipeline))[0])
+        return jsonify(list(db[f'interval_30'].aggregate(pipeline))[0])
 
 
     app.run()
