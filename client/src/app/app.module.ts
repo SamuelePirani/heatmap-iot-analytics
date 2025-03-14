@@ -15,10 +15,15 @@ import {HeatmapComponent} from './heatmap/heatmap.component';
 import {provideHttpClient} from '@angular/common/http';
 import {NgOptimizedImage} from '@angular/common';
 import { LoginComponent } from './login/login.component';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterOutlet} from '@angular/router';
 import { NbDialogModule } from '@nebular/theme';
 import {NbEvaIconsModule} from '@nebular/eva-icons';
+import { providePrimeNG } from 'primeng/config';
+import Aura from '@primeng/themes/aura';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { SliderModule } from 'primeng/slider';
+
 
 @NgModule({
     declarations: [
@@ -44,10 +49,18 @@ import {NbEvaIconsModule} from '@nebular/eva-icons';
     NbFormFieldModule,
     NbEvaIconsModule,
     NbIconModule,
+    SliderModule,
+    FormsModule
   ],
     providers: [
         provideClientHydration(withEventReplay()),
-        provideHttpClient()
+        provideHttpClient(),
+        provideAnimationsAsync(),
+        providePrimeNG({
+          theme: {
+            preset: Aura
+          }
+        })
     ],
     bootstrap: [AppComponent]
 })

@@ -20,6 +20,7 @@ interface Floor {
 })
 export class AppComponent {
     isBrowser: boolean;
+    value = 0;
 
     floors: Floor[] = [
         {id: 'floor1', name: 'First Floor', geoJsonUrl: './assets/geoJsonFloor/FirstFloor.geojson'},

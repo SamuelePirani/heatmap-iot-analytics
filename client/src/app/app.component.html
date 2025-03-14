@@ -81,5 +81,10 @@
                 *ngIf="isBrowser"
                 [geoJsonUrl]="selectedFloor"
         ></app-heatmap>
+
+      <div class="card flex justify-center">
+        <p-slider [(ngModel)]="value" styleClass="w-56" />
+      </div>
+
     </nb-layout-column>
 </nb-layout>
