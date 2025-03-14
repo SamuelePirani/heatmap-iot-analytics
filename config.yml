@@ -2,13 +2,9 @@ base_path:
   iot_data_root: ./data/iot_data
   geoJson_data_root: ./data/geoJson
 is_normalized: true
-config_datapath:
-  geoJson_data: C:\Users\macma\PycharmProjects\HeatMap---TBDM2425\./data/geoJson
-  iot_data: C:\Users\macma\PycharmProjects\HeatMap---TBDM2425\./data/iot_data
 date_range:
   start: '2025-03-02 11:00:00'
   end: '2025-03-02 12:00:00'
-room: nome_della_stanza
 intervals:
-  - 30
-  - 60
+- 30
+- 60

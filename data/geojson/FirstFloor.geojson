@@ -116,7 +116,7 @@
          "properties":{
             "type":"Room",
             "name":"LA2",
-            "room_id":"417",
+            "room_id":417,
             "description":"TeamLab - Polo A"
          },
          "geometry":{
@@ -153,7 +153,7 @@
          "properties":{
             "type":"Room",
             "name":"AA3",
-            "room_id":"419",
+            "room_id":419,
             "description":"Aula AA3 - Polo A"
          },
          "geometry":{
@@ -184,6 +184,326 @@
             "type":"Polygon"
          },
          "id":4
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "type":"co2 sensor",
+            "hotel_room_id":415,
+            "room":"LA1"
+         },
+         "geometry":{
+            "coordinates":[
+               13.06886131509637,
+               43.139677555201956
+            ],
+            "type":"Point"
+         },
+         "id":6
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "type":"pir sensor",
+            "hotel_room_id":415,
+            "room":"LA1"
+         },
+         "geometry":{
+            "coordinates":[
+               13.068807755069713,
+               43.139646174134526
+            ],
+            "type":"Point"
+         },
+         "id":7
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "type":"humidity sensor",
+            "hotel_room_id":415,
+            "room":"LA1"
+         },
+         "geometry":{
+            "coordinates":[
+               13.068937208951922,
+               43.1397052704703
+            ],
+            "type":"Point"
+         },
+         "id":8
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "type":"temperature sensor",
+            "hotel_room_id":415,
+            "room":"LA1"
+         },
+         "geometry":{
+            "coordinates":[
+               13.068766546047357,
+               43.13962724664029
+            ],
+            "type":"Point"
+         },
+         "id":9
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "type":"light sensor",
+            "hotel_room_id":415,
+            "room":"LA1"
+         },
+         "geometry":{
+            "coordinates":[
+               13.068903652366771,
+               43.139696580145255
+            ],
+            "type":"Point"
+         },
+         "id":10
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "type":"pir sensor",
+            "hotel_room_id":413,
+            "room":"AA1"
+         },
+         "geometry":{
+            "coordinates":[
+               13.068606584567533,
+               43.13956465593341
+            ],
+            "type":"Point"
+         },
+         "id":11
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "type":"light sensor",
+            "hotel_room_id":413,
+            "room":"AA1"
+         },
+         "geometry":{
+            "coordinates":[
+               13.06863245051025,
+               43.13954460217042
+            ],
+            "type":"Point"
+         },
+         "id":12
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "type":"humidity sensor",
+            "hotel_room_id":413,
+            "room":"AA1"
+         },
+         "geometry":{
+            "coordinates":[
+               13.068534375477952,
+               43.13954460217042
+            ],
+            "type":"Point"
+         },
+         "id":13
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "type":"co2 sensor",
+            "hotel_room_id":413,
+            "room":"AA1"
+         },
+         "geometry":{
+            "coordinates":[
+               13.068562935788776,
+               43.13951275206264
+            ],
+            "type":"Point"
+         },
+         "id":14
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "type":"temperature sensor",
+            "hotel_room_id":413,
+            "room":"AA1"
+         },
+         "geometry":{
+            "coordinates":[
+               13.068583238082113,
+               43.13954493213623
+            ],
+            "type":"Point"
+         },
+         "id":15
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "type":"pir sensor",
+            "hotel_room_id":417,
+            "room":"LA2"
+         },
+         "geometry":{
+            "coordinates":[
+               13.068592107623772,
+               43.13947204459174
+            ],
+            "type":"Point"
+         },
+         "id":16
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "type":"co2 sensor",
+            "hotel_room_id":417,
+            "room":"LA2"
+         },
+         "geometry":{
+            "coordinates":[
+               13.068628212168534,
+               43.13948580699554
+            ],
+            "type":"Point"
+         },
+         "id":17
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "type":"humidity sensor",
+            "hotel_room_id":417,
+            "room":"LA2"
+         },
+         "geometry":{
+            "coordinates":[
+               13.068668088830947,
+               43.13950271508688
+            ],
+            "type":"Point"
+         },
+         "id":18
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "type":"light sensor",
+            "hotel_room_id":417,
+            "room":"LA2"
+         },
+         "geometry":{
+            "coordinates":[
+               13.068622284556966,
+               43.13945317043371
+            ],
+            "type":"Point"
+         },
+         "id":19
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "type":"temperature sensor",
+            "hotel_room_id":417,
+            "room":"LA2"
+         },
+         "geometry":{
+            "coordinates":[
+               13.068679944054054,
+               43.13947597670739
+            ],
+            "type":"Point"
+         },
+         "id":20
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "type":"temperature sensor",
+            "hotel_room_id":419,
+            "room":"AA3"
+         },
+         "geometry":{
+            "coordinates":[
+               13.068928528223239,
+               43.139615956672
+            ],
+            "type":"Point"
+         },
+         "id":21
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "type":"pir sensor",
+            "hotel_room_id":419,
+            "room":"AA3"
+         },
+         "geometry":{
+            "coordinates":[
+               13.068972817480528,
+               43.13963735603667
+            ],
+            "type":"Point"
+         },
+         "id":22
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "type":"light sensor",
+            "hotel_room_id":419,
+            "room":"AA3"
+         },
+         "geometry":{
+            "coordinates":[
+               13.069012318709952,
+               43.139655261622266
+            ],
+            "type":"Point"
+         },
+         "id":23
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "type":"co2 sensor",
+            "hotel_room_id":419,
+            "room":"AA3"
+         },
+         "geometry":{
+            "coordinates":[
+               13.068965635438701,
+               43.139608969122634
+            ],
+            "type":"Point"
+         },
+         "id":24
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "type":"humidity sensor",
+            "hotel_room_id":419,
+            "room":"AA3"
+         },
+         "geometry":{
+            "coordinates":[
+               13.069012917213826,
+               43.139629931768354
+            ],
+            "type":"Point"
+         },
+         "id":25
       }
    ]
 }

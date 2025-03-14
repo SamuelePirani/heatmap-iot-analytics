@@ -1,48 +1,29 @@
 import os
-import threading
+from typing import Any, Dict
 
 import yaml
 
 
-class SingletonMeta(type):
-    _instances = {}
-    _lock = threading.Lock()
+class ConfigurationManager:
+    def __init__(self, file_path: str) -> None:
+        self.file_path = file_path
+        self.config: Dict[str, Any] = {}
 
-    def __call__(cls, *args, **kwargs):
-        with cls._lock:
-            if cls not in cls._instances:
-                instance = super().__call__(*args, **kwargs)
-                cls._instances[cls] = instance
-        return cls._instances[cls]
+    def load_config(self) -> Dict[str, Any]:
+        with open(self.file_path) as file:
+            self.config = yaml.safe_load(file)
+        return self.config
 
+    def configure_data_paths(self) -> Dict[str, Any]:
+        if not self.config:
+            self.load_config()
 
-class ConfigurationManager(metaclass=SingletonMeta):
+        base_path = self.config.get("base_path", {})
+        iot_data = os.path.join(os.getcwd(), base_path.get("iot_data_root", ""))
+        geojson_data = os.path.join(os.getcwd(), base_path.get("geoJson_data_root", ""))
 
-    def __init__(self, file_path):
-        self.config_file = None
-        self.config_path = file_path
+        self.config.setdefault("config_datapath", {})
+        self.config["config_datapath"]["iot_data"] = iot_data
+        self.config["config_datapath"]["geoJson_data"] = geojson_data
 
-    def setup_data_path_user(self):
-        new_config = self.get_config()
-
-        iot_datapath = os.path.join(os.getcwd(), new_config["base_path"]["iot_data_root"])
-        geojson_datapath = os.path.join(os.getcwd(), new_config["base_path"]["geoJson_data_root"])
-
-        new_config["config_datapath"]["iot_data"] = iot_datapath
-        new_config["config_datapath"]["geoJson_data"] = geojson_datapath
-
-        self.update_config(new_config)
-
-    def get_config(self):
-        if self.config_file is None:
-            self.read_config(self.config_path)
-        return self.config_file
-
-    def read_config(self, file_path):
-        with open(file_path, 'r') as file:
-            self.config_file = yaml.safe_load(file)
-
-    def update_config(self, new_config):
-        with open(self.config_path, 'w') as file:
-            yaml.dump(new_config, file, default_flow_style=False, sort_keys=False)
-        self.config_file = new_config
+        return self.config
