@@ -43,7 +43,7 @@ def load_and_analyze(spark, config: dict, client):
         analyzer = Analyzer(reader)
         logger.info("Data loading complete")
         logger.info("Running analysis...")
-        analyzer.run_analysis(config["intervals"], client, config["config_datapath"]["geoJson_data"])
+        analyzer.run_analysis(config["intervals"], client)
         logger.info("Analysis complete")
     except Exception as e:
         logger.error(f"Error during loading or analysis: {e}")
