@@ -7,57 +7,127 @@ import {LoginComponent} from './login/login.component';
 import {NbDialogService} from '@nebular/theme';
 
 interface Floor {
-    id: string;
-    name: string;
-    geoJsonUrl: string;
+  id: string;
+  name: string;
+  geoJsonUrl: string;
 }
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    standalone: false,
-    styleUrl: './app.component.scss',
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  standalone: false,
+  styleUrl: './app.component.scss',
 })
 export class AppComponent {
-    isBrowser: boolean;
-    value = 0;
+  isBrowser: boolean;
+  value = 0;
 
-    floors: Floor[] = [
-        {id: 'floor1', name: 'First Floor', geoJsonUrl: './assets/geoJsonFloor/FirstFloor.geojson'},
-        {id: 'floor2', name: 'Second Floor', geoJsonUrl: './assets/geoJsonFloor/SecondFloor.geojson'},
-    ];
+  floors: Floor[] = [
+    {id: 'floor1', name: 'First Floor', geoJsonUrl: './assets/geoJsonFloor/FirstFloor.geojson'},
+    {id: 'floor2', name: 'Second Floor', geoJsonUrl: './assets/geoJsonFloor/SecondFloor.geojson'},
+  ];
 
-    selectedFloor: string = this.floors[0].geoJsonUrl;
-    rooms: string[] = [];
-    selectedRoom: string = '';
+  sensors: string[] = ['Temperature', 'Humidity', 'CO2', 'Light', 'Pir'];
 
-    constructor(
-        @Inject(PLATFORM_ID) private readonly platformId: object,
-        private readonly http: HttpClient,
-        private readonly dataService: DataService,
-        private dialogService: NbDialogService
-    ) {
-        this.isBrowser = isPlatformBrowser(this.platformId);
-        this.fetchRooms(this.selectedFloor);
-    }
+  intervals: number[] = [30, 60]
 
-    fetchRooms(geoJsonUrl: string): void {
-        this.http.get(geoJsonUrl).subscribe((data: unknown) => {
-            const geoJsonFeatures = new GeoJSON().readFeatures(data);
-            this.rooms = geoJsonFeatures
-                .filter((feature: any) => feature.get('type') === 'Room')
-                .map((feature: any) => feature.get('name'));
-        });
-    }
+  selectedFloor: string = this.floors[0].geoJsonUrl;
+  rooms: string[] = [];
+  selectedRoom: string = '';
 
-    onFloorChange(newFloorUrl: string): void {
-        this.selectedFloor = newFloorUrl;
-        this.selectedRoom = '';
-        this.fetchRooms(newFloorUrl);
-    }
+  startSelectedDate: Date | null = null;
+  endSelectedDate: Date | null = null;
+
+  loading = false;
+
+  selectedSensor: string | null = null;
+  selectedInterval: number = 0;
+
+  minDate: Date = new Date('2025-3-10');
+  maxDate: Date = new Date('2025-3-20');
+
+  constructor(
+    @Inject(PLATFORM_ID) private readonly platformId: object,
+    private readonly http: HttpClient,
+    private readonly dataService: DataService,
+    private dialogService: NbDialogService
+  ) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+    this.fetchRooms(this.selectedFloor);
+  }
+
+  fetchRooms(geoJsonUrl: string): void {
+    this.http.get(geoJsonUrl).subscribe((data: unknown) => {
+      const geoJsonFeatures = new GeoJSON().readFeatures(data);
+      this.rooms = geoJsonFeatures
+        .filter((feature: any) => feature.get('type') === 'Room')
+        .map((feature: any) => feature.get('name'));
+    });
+  }
+
+  onFloorChange(newFloorUrl: string): void {
+    this.selectedFloor = newFloorUrl;
+    console.log("Changed Floor:", this.selectedFloor);
+    this.selectedRoom = '';
+    this.fetchRooms(newFloorUrl);
+  }
 
   openLoginModal(): void {
     this.dialogService.open(LoginComponent);
   }
 
+  onStartDateChange(event: any): void {
+    this.startSelectedDate = event;
+    console.log("Start Date:", this.startSelectedDate);
+  }
+
+  onEndDateChange(event: any): void {
+    this.endSelectedDate = event;
+    console.log("End Date:", event);
+  }
+
+  onQueryButtonClick(): void {
+    this.toggleLoadingAnimation()
+    if (!this.selectedFloor) {
+      alert('Please select a floor');
+      return;
+    }
+    if (!this.startSelectedDate || !this.endSelectedDate) {
+      alert('Please select start and end dates');
+      return;
+    }
+    if (!this.selectedSensor) {
+      alert('Please select a sensor');
+      return
+    }
+    if (!this.intervals.includes(this.selectedInterval)) {
+      alert('Please select a time interval');
+      return
+    }
+    const data = {
+      'start_date': this.startSelectedDate,
+      'end_date': this.endSelectedDate,
+      'sensor': this.selectedSensor,
+      'interval': this.selectedInterval,
+      'floor': this.selectedFloor,
+      'room': this.selectedRoom
+    }
+
+    console.log("Query Data:", data);
+  }
+
+  toggleLoadingAnimation(): void {
+    this.loading = true;
+    setTimeout(() => this.loading = false, 3000);
+  }
+
+  onTimeIntervalChange(value: any): void {
+    console.log("Time Interval:", value);
+    this.selectedInterval = value;
+  }
+
+  onSensorChange(value: any): void {
+    console.log("Sensor:", value.value);
+    this.selectedSensor = value.value;
+  }
 }

@@ -1,90 +1,116 @@
 <nb-layout>
-    <nb-layout-header fixed>
-        <div class="header-layout">
-            <img
-                    alt="Logo of University of Camerino"
-                    class="logo-header"
-                    src="assets/unicamLogo.png"
-            />
-            <h5>Unicam Pole - Heatmap Analytic</h5>
-        </div>
-    </nb-layout-header>
+  <nb-layout-header fixed>
+    <div class="header-layout">
+      <img
+        alt="Logo of University of Camerino"
+        class="logo-header"
+        src="assets/unicamLogo.png"
+      />
+      <h5>Unicam Pole - Heatmap Analytic</h5>
+    </div>
+  </nb-layout-header>
 
-    <nb-sidebar>
-        <div class="sel-items-box">
+  <nb-sidebar>
+    <div class="sel-items-box">
 
-            <label class="sel-item" for="sel-floor">
-                FLOOR
-                <nb-select
-                        (selectedChange)="onFloorChange($event)"
-                        [(selected)]="selectedFloor"
-                        id="sel-floor"
-                        placeholder="Choose a floor"
-                >
-                    <nb-option
-                            *ngFor="let floor of floors"
-                            [value]="floor.geoJsonUrl"
-                    >
-                        {{ floor.name }}
-                    </nb-option>
-                </nb-select>
-            </label>
+      <label class="sel-item" for="sel-floor">
+        FLOOR
+        <nb-select
+          (selectedChange)="onFloorChange($event)"
+          [(selected)]="selectedFloor"
+          id="sel-floor"
+          placeholder="Choose a floor"
+        >
+          <nb-option
+            *ngFor="let floor of floors"
+            [value]="floor.geoJsonUrl"
+          >
+            {{ floor.name }}
+          </nb-option>
+        </nb-select>
+      </label>
 
-            <label class="sel-item" for="sel-int">
-                TIME INTERVAL
-                <nb-select
-                        id="sel-int"
-                        placeholder="Choose time intervals"
-                >
-                    <nb-option value="0">30 minutes</nb-option>
-                    <nb-option value="1">1 hour</nb-option>
-                </nb-select>
-            </label>
+      <label class="sel-item" for="sel-int">
+        TIME INTERVAL
+        <nb-select
+          id="sel-int"
+          placeholder="Choose time intervals"
+          (selectedChange)="onTimeIntervalChange($event)"
+        >
+          <nb-option
+            *ngFor="let interval of intervals"
+            [value]="interval"
+          >
+            {{ interval }}
+          </nb-option>
+        </nb-select>
+      </label>
 
-          <label class="sel-item" for="sel-sensor">
-            SENSOR TYPE
-            <nb-select
-              id="sel-sensor"
-              placeholder="Choose sensor type"
-            >
-              <nb-option value="0">CO2</nb-option>
-              <nb-option value="1">TEMPERATURE</nb-option>
-              <nb-option value="2">PIR</nb-option>
-              <nb-option value="3">LIGHT</nb-option>
-              <nb-option value="4">HUMIDITY</nb-option>
-            </nb-select>
-          </label>
+      <label class="sel-item" for="sel-sensor">
+        SENSOR TYPE
+        <nb-select
+          id="sel-sensor"
+          placeholder="Choose sensor type"
+        >
+          <nb-option
+            *ngFor="let sensor of sensors"
+            [value]="sensor"
+            (selectionChange)="onSensorChange($event)"
+          >
+            {{ sensor }}
+          </nb-option>
+        </nb-select>
+      </label>
 
-            <label class="sel-item" for="sel-room">
-                ROOM
-                <nb-select
-                        [(selected)]="selectedRoom"
-                        id="sel-room"
-                        placeholder="Choose room"
-                >
-                    <nb-option
-                            *ngFor="let room of rooms"
-                            [value]="room"
-                    >
-                        {{ room }}
-                    </nb-option>
-                </nb-select>
-            </label>
+      <label class="sel-item" for="sel-room">
+        ROOM
+        <nb-select
+          [(selected)]="selectedRoom"
+          id="sel-room"
+          placeholder="Choose room"
+        >
+          <nb-option
+            *ngFor="let room of rooms"
+            [value]="room"
+          >
+            {{ room }}
+          </nb-option>
+        </nb-select>
+      </label>
 
-            <button nbButton status="basic" (click)="openLoginModal()"> Setting </button>
+      <label class="sel-item">
+        START DATE
+        <input placeholder="Start date" [nbDatepicker]="datepicker">
+        <nb-datepicker [min]="minDate" [max]="maxDate"  (dateChange)="onStartDateChange($event)" #datepicker></nb-datepicker>
+      </label>
 
-        </div>
-    </nb-sidebar>
+      <label class="sel-item">
+        END DATE
+        <input placeholder="End date" [nbDatepicker]="datepicker2">
+        <nb-datepicker [min]="minDate" [max]="maxDate"  (dateChange)="onEndDateChange($event)" #datepicker2></nb-datepicker>
+      </label>
 
-    <nb-layout-column>
-        <app-heatmap
-                *ngIf="isBrowser"
-                [geoJsonUrl]="selectedFloor"
-        ></app-heatmap>
+      <button nbButton
+              status="basic"
+              [nbSpinner]="loading"
+              nbSpinnerStatus="info"
+              (click)="onQueryButtonClick()">
+        Query
+      </button>
+      <button nbButton status="basic" (click)="openLoginModal()"> Setting</button>
 
-      <div class="card flex justify-center">
-        <p-slider [(ngModel)]="value" styleClass="w-56" />
-      </div>
+    </div>
+  </nb-sidebar>
 
-    </nb-layout-column>
+  <nb-layout-column>
+    <app-heatmap
+      *ngIf="isBrowser"
+      [geoJsonUrl]="selectedFloor"
+    ></app-heatmap>
+
+    <div class="card flex justify-center">
+      <p-slider [(ngModel)]="value" styleClass="w-56"/>
+    </div>
+
+  </nb-layout-column>
 </nb-layout>

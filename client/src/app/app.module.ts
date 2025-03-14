@@ -9,7 +9,8 @@ import {
   NbLayoutModule,
   NbSelectModule,
   NbSidebarModule,
-  NbThemeModule
+  NbThemeModule,
+  NbDatepickerModule, NbSpinnerModule
 } from '@nebular/theme';
 import {HeatmapComponent} from './heatmap/heatmap.component';
 import {provideHttpClient} from '@angular/common/http';
@@ -50,7 +51,9 @@ import { SliderModule } from 'primeng/slider';
     NbEvaIconsModule,
     NbIconModule,
     SliderModule,
-    FormsModule
+    FormsModule,
+    NbDatepickerModule.forRoot(),
+    NbSpinnerModule
   ],
     providers: [
         provideClientHydration(withEventReplay()),
