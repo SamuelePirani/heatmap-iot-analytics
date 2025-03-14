@@ -3,6 +3,7 @@ import os
 import pymongo
 from flask import Flask, jsonify, request
 from pymongo.server_api import ServerApi
+from flask_cors import CORS
 
 
 def connect_to_mongo():
@@ -26,6 +27,7 @@ def connect_to_mongo():
 
 def main():
     app = Flask(__name__)
+    CORS(app)
 
     db = connect_to_mongo()
 
