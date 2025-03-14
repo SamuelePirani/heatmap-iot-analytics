@@ -1,0 +1,9 @@
+name: heatmap-web
+channels:
+  - conda-forge
+  - anaconda
+  - defaults
+dependencies:
+  - flask
+  - flask-cors
+  - pymongo
