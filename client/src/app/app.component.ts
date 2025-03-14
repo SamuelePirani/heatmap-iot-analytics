@@ -5,6 +5,7 @@ import GeoJSON from 'ol/format/GeoJSON';
 import {DataService} from "./data.service";
 import {LoginComponent} from './login/login.component';
 import {NbDialogService} from '@nebular/theme';
+import {WebService} from '../services/web.service';
 
 interface Floor {
   id: string;
@@ -50,10 +51,23 @@ export class AppComponent {
     @Inject(PLATFORM_ID) private readonly platformId: object,
     private readonly http: HttpClient,
     private readonly dataService: DataService,
-    private dialogService: NbDialogService
+    private dialogService: NbDialogService,
+    private webService: WebService
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
     this.fetchRooms(this.selectedFloor);
+
+    try {
+      this.webService.getRange().subscribe(
+        next => {
+          console.log("Range Data:", next);
+          this.maxDate = new Date(next['max_end_date']);
+          this.minDate = new Date(next['min_start_date']);
+        }
+      )
+    } catch (error) {
+      console.error("Error fetching range data:", error);
+    }
   }
 
   fetchRooms(geoJsonUrl: string): void {
@@ -114,6 +128,8 @@ export class AppComponent {
     }
 
     console.log("Query Data:", data);
+
+
   }
 
   toggleLoadingAnimation(): void {
