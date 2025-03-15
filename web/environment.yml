@@ -6,4 +6,4 @@ channels:
 dependencies:
   - flask
   - flask-cors
-  - pymongo
+  - pymongo=4.11.0
