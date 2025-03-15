@@ -142,17 +142,17 @@ export class AppComponent {
     ).subscribe(
       next => {
         this.queryResponse = next;
-        const uniqueValues = new Set();
         if (this.queryResponse) {
           this.queryResponse.forEach(
               (element: any) => {
               if (element.start) {
-                uniqueValues.add(element.start);
+                if (!this.valueArray.includes(element.start)) {
+                  this.valueArray.push(element.start);
+                }
               }
             }
           )
         }
-        this.valueArray = Array.from(uniqueValues) as string[];
         console.log("Query Response:", this.queryResponse);
       }
     )

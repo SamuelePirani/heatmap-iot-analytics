@@ -58,7 +58,7 @@ def main():
         query = {"start": {"$gte": datetime.fromisoformat(start)}, "end": {"$lte": datetime.fromisoformat(end)}}
         if room_name and room_name != "":
             query["room_name"] = room_name
-        sensors = list(db[f"interval_{interval}"].find(query, {"_id": 0}))
+        sensors = list(db[f"interval_{interval}"].find(query, {"_id": 0}).sort({"start": 1}))
         return jsonify(sensors)
     app.run()
 
