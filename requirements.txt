@@ -2,7 +2,4 @@ pyspark==3.5.4
 pandas~=2.2.3
 pyyaml~=6.0.2
 yaml~=0.2.5
-pymongo~=4.11.0
 geojson~=3.2.0
-flask
-flask-cors
