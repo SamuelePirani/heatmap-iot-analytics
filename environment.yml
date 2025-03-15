@@ -1,4 +1,4 @@
-name: heatmap-analytics
+name: heatmap-iot-analytics
 channels:
   - conda-forge
   - anaconda

@@ -108,7 +108,7 @@ Deactivate and reactivate the environment for changes to take effect:
 
 ```bash
 conda deactivate
-conda activate heatmap-web
+conda activate heatmap-iot-analytics
 ```
 
 ---
