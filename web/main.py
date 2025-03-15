@@ -55,10 +55,13 @@ def main():
         start = request.args.get('start')
         end = request.args.get('end')
 
+        if not interval or not start or not end:
+            return jsonify({"error": "Parameters 'interval', 'start' and 'end' are mandatory"}), 400
+
         start = fix_date_format(start)
         end = fix_date_format(end)
 
-        query = {"start": {"$gte": datetime.fromisoformat(start)}, "end": {"$lte": datetime.fromisoformat(end)}, "room_name": room_name}
+        query = {"start": {"$gte": datetime.fromisoformat(start)}, "end": {"$lte": datetime.fromisoformat(end)}}
 
         if room_name:
             query["room_name"] = room_name
