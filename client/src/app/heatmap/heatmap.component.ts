@@ -38,24 +38,7 @@ export class HeatmapComponent implements OnChanges {
     return (value - min) / (max - min)
   }
 
-  private getMinAndMaxValuesFromData(data: any[], selectedSensor: string) {
-    let min = Infinity
-    let max = -Infinity
-
-    data.forEach((item) => {
-      const sensors = item['sensors']
-      for (let i = 0; i < sensors.length; i++) {
-        const sensorsData = sensors[i]
-        if (sensorsData['type'] === selectedSensor) {
-          min = Math.min(min, sensorsData['min'])
-          max = Math.max(max, sensorsData['max'])
-        }
-      }
-    })
-    return {min, max}
-  }
-
-  public createHeatmap(data: any[], selectedSensor: string, startDate: string): void {
+  public createHeatmap(data: any[], selectedSensor: string, startDate: string, min:number, max:number): void {
     const allFeatures = this.vectorSource?.getFeatures() ?? [];
     const pointFeatures = allFeatures.filter((feature) => {
       if (feature && feature.getGeometry()) {
@@ -64,9 +47,6 @@ export class HeatmapComponent implements OnChanges {
       return false;
     });
 
-    const minAndMax = this.getMinAndMaxValuesFromData(data, selectedSensor)
-    const min = minAndMax.min
-    const max = minAndMax.max
     pointFeatures.forEach((feature) => {
       const type = feature.get('type').split(' ')[0];
       if (type === selectedSensor) {

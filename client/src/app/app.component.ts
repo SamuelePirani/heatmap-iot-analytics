@@ -132,13 +132,6 @@ export class AppComponent {
       alert('Please select a time interval');
       return
     }
-    const data = {
-      'start_date': this.startSelectedDate,
-      'end_date': this.endSelectedDate,
-      'sensor': this.selectedSensor,
-      'interval': this.selectedInterval,
-      'room': this.selectedRoom
-    }
     this.queryResponse = null;
     this.webService.getQuery(
       this.startSelectedDate.toISOString(),
@@ -160,6 +153,9 @@ export class AppComponent {
             }
           )
         }
+        this.min = Infinity;
+        this.max = -Infinity;
+        this.updateMinAndMaxValuesFromData(this.queryResponse, this.getSelectedSensor());
         this.updateHeatmap();
       }
     )
@@ -178,6 +174,12 @@ export class AppComponent {
   onSensorChange(value: any): void {
     console.log("Sensor:", value.value);
     this.selectedSensor = value.value;
+    if (this.queryResponse) {
+      this.min = Infinity;
+      this.max = -Infinity;
+      this.updateMinAndMaxValuesFromData(this.queryResponse, this.getSelectedSensor());
+      this.updateHeatmap();
+    }
   }
 
   getSliderValue(): string {
@@ -189,9 +191,29 @@ export class AppComponent {
     this.updateHeatmap()
   }
 
+  private getSelectedSensor(): string {
+    return this.selectedSensor?.toLowerCase() ?? '';
+  }
+
   private updateHeatmap(): void {
     if (this.heatmapComponent) {
-      this.heatmapComponent.createHeatmap(this.queryResponse, 'temperature', this.getSliderValue() ?? '');
+      this.heatmapComponent.createHeatmap(this.queryResponse, this.getSelectedSensor(), this.getSliderValue() ?? '', this.min, this.max);
     }
+  }
+
+  min = Infinity
+  max = -Infinity
+
+  private updateMinAndMaxValuesFromData(data: any[], selectedSensor: string): void {
+    data.forEach((item) => {
+      const sensors = item['sensors']
+      for (let i = 0; i < sensors.length; i++) {
+        const sensorsData = sensors[i]
+        if (sensorsData['type'] === selectedSensor) {
+          this.min = Math.min(this.min, sensorsData['min'])
+          this.max = Math.max(this.max, sensorsData['max'])
+        }
+      }
+    })
   }
 }
