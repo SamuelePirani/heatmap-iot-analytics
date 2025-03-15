@@ -1,55 +1,96 @@
-### Creating/Updating the Conda Environment
+# Python/Flask Backend
 
-Use the provided `environment.yml` file to create (or update) the Conda environment with all necessary dependencies:
+This directory contains the Python/Flask application for processing IoT data and exposing endpoints for the heat map
+analytics.
 
-- **Creating the environment:**
+---
+
+## Table of Contents
+
+- [Conda Environment](#conda-environment)
+    - [Creating or Updating the Conda Environment](#creating-or-updating-the-conda-environment)
+    - [Configuring MongoDB Variables](#configuring-mongodb-variables)
+- [Running the Application](#running-the-application)
+- [Verifying the Installation](#verifying-the-installation)
+- [Additional Tips](#additional-tips)
+
+---
+
+## Conda Environment
+
+### Creating or Updating the Conda Environment
+
+A file named `environment.yml` is provided in this directory:
+
+- **Create** the environment if you have not already:
 
   ```bash
   cd .\web\
+  ```
+
+  ```bash
   conda env create -f environment.yml
   ```
 
-- **Updating an existing environment:**
+- **Update** the environment if it exists:
 
   ```bash
   conda env update -f environment.yml --prune
   ```
 
-### Configuring MongoDB Connection Variables
+> The default environment name is **heatmap-web** (which you can change inside `environment.yml`).
 
-The project uses environment variables to configure the MongoDB connection. After creating or updating your Conda
-environment, set the appropriate variables using the following commands:
+### Configuring MongoDB Variables
+
+Set your MongoDB credentials after creating/updating the environment:
 
 ```bash
-conda env config vars set MONGO_PASSWORD="your_password"
 conda env config vars set MONGO_USERNAME="your_username"
+conda env config vars set MONGO_PASSWORD="your_password"
 conda env config vars set MONGO_URL="your_url"
 ```
 
-### Running the Flask Application
-
-After setting up the environment and configuring MongoDB, activate the Conda environment and run the Flask application:
+Deactivate and then reactivate the environment so these variables take effect:
 
 ```bash
+conda deactivate
 conda activate heatmap-web
 ```
 
-```bash
-python main.py
-```
+---
 
-### Verifying the Installation
+## Running the Application
 
-To verify that Flask and PyMongo are installed correctly, you can check their versions:
+1. Run the Flask application:
+
+   ```bash
+   python main.py
+   ```
+2. If the server starts successfully, you will see console output indicating which port the application is listening on.
+
+---
+
+## Verifying the Installation
+
+You can check package versions (e.g., Flask or PyMongo) to confirm dependencies are correctly installed:
 
 ```bash
 python -c "import flask; print(flask.__version__)"
 python -c "import pymongo; print(pymongo.__version__)"
 ```
 
-If you encounter any issues, ensure that all dependencies are correctly installed using:
+To see a list of all installed packages and their versions:
 
 ```bash
-pip list | grep -E 'Flask|pymongo'
+pip list
 ```
 
+---
+
+## Additional Tips
+
+- **IDE Usage**: Ensure your IDE is configured to use the `heatmap-web` environment.
+- **Logging**: Logs can be inspected in the console or the location you configure in `main.py`.
+- **Common Errors**:
+    - Missing environment variables can lead to “Invalid URI host” exceptions if your MongoDB URI is incomplete.
+    - If you cannot connect to MongoDB, confirm that the database accepts connections from your machine/IP.
