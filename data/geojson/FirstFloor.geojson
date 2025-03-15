@@ -429,7 +429,7 @@
          "type":"Feature",
          "properties":{
             "type":"temperature sensor",
-            "hotel_room_id":419,
+            "hotel_room_id":424,
             "room":"AA3"
          },
          "geometry":{
@@ -445,7 +445,7 @@
          "type":"Feature",
          "properties":{
             "type":"pir sensor",
-            "hotel_room_id":419,
+            "hotel_room_id":424,
             "room":"AA3"
          },
          "geometry":{
@@ -461,7 +461,7 @@
          "type":"Feature",
          "properties":{
             "type":"light sensor",
-            "hotel_room_id":419,
+            "hotel_room_id":424,
             "room":"AA3"
          },
          "geometry":{
@@ -477,7 +477,7 @@
          "type":"Feature",
          "properties":{
             "type":"co2 sensor",
-            "hotel_room_id":419,
+            "hotel_room_id":424,
             "room":"AA3"
          },
          "geometry":{
@@ -493,7 +493,7 @@
          "type":"Feature",
          "properties":{
             "type":"humidity sensor",
-            "hotel_room_id":419,
+            "hotel_room_id":424,
             "room":"AA3"
          },
          "geometry":{
