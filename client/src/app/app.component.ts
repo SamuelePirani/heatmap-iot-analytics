@@ -60,7 +60,6 @@ export class AppComponent {
     try {
       this.webService.getRange().subscribe(
         next => {
-          console.log("Range Data:", next);
           this.maxDate = new Date(next['max_end_date']);
           this.minDate = new Date(next['min_start_date']);
         }
@@ -123,12 +122,22 @@ export class AppComponent {
       'end_date': this.endSelectedDate,
       'sensor': this.selectedSensor,
       'interval': this.selectedInterval,
-      'floor': this.selectedFloor,
       'room': this.selectedRoom
     }
 
     console.log("Query Data:", data);
 
+    this.webService.getQuery(
+      this.startSelectedDate.toISOString(),
+      this.endSelectedDate.toISOString(),
+      this.selectedRoom,
+      this.selectedSensor,
+      this.selectedInterval
+    ).subscribe(
+      next => {
+        console.log("Query Data:", next);
+      }
+    )
 
   }
 
