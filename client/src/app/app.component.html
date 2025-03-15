@@ -80,13 +80,13 @@
 
       <label class="sel-item">
         START DATE
-        <input placeholder="Start date" [nbDatepicker]="datepicker">
+        <input nbInput placeholder="Start Date" [nbDatepicker]="datepicker" [(ngModel)]="selectedStartDate">
         <nb-datepicker [min]="minDate" [max]="maxDate"  (dateChange)="onStartDateChange($event)" #datepicker></nb-datepicker>
       </label>
 
       <label class="sel-item">
         END DATE
-        <input placeholder="End date" [nbDatepicker]="datepicker2">
+        <input nbInput placeholder="End Date" [nbDatepicker]="datepicker2" [(ngModel)]="selectedEndDate">
         <nb-datepicker [min]="minDate" [max]="maxDate"  (dateChange)="onEndDateChange($event)" #datepicker2></nb-datepicker>
       </label>
 

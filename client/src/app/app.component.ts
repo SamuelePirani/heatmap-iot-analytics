@@ -44,8 +44,11 @@ export class AppComponent {
   selectedSensor: string | null = null;
   selectedInterval: number = 0;
 
-  minDate: Date = new Date('2025-3-10');
-  maxDate: Date = new Date('2025-3-20');
+  minDate: Date = new Date('2013-8-23');
+  maxDate: Date = new Date('2013-9-01');
+
+  selectedStartDate =  this.minDate;
+  selectedEndDate =  this.maxDate;
 
   queryResponse: any = null;
 
