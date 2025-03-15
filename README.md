@@ -55,8 +55,8 @@ If you do not have Conda installed:
 Clone the project repository to your local machine:
 
 ```bash
-git clone https://github.com/SamuelePirani/HeatMap---TBDM2425.git
-cd HeatMap---TBDM2425
+git clone https://github.com/SamuelePirani/heatmap-iot-analytics.git
+cd heatmap-iot-analytics
 ```
 
 ### Creating/Updating the Conda Environment

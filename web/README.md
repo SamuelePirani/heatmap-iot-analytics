@@ -5,6 +5,7 @@ Use the provided `environment.yml` file to create (or update) the Conda environm
 - **Creating the environment:**
 
   ```bash
+  cd .\web\
   conda env create -f environment.yml
   ```
 
@@ -36,7 +37,6 @@ conda activate heatmap-web
 ```bash
 python main.py
 ```
-
 
 ### Verifying the Installation
 
