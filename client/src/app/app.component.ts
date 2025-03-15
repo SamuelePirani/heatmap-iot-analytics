@@ -47,6 +47,11 @@ export class AppComponent {
   minDate: Date = new Date('2025-3-10');
   maxDate: Date = new Date('2025-3-20');
 
+  queryResponse: any = null;
+
+  valueArray: string[] = [];
+  sliderIndex: number = 0;
+
   constructor(
     @Inject(PLATFORM_ID) private readonly platformId: object,
     private readonly http: HttpClient,
@@ -124,9 +129,7 @@ export class AppComponent {
       'interval': this.selectedInterval,
       'room': this.selectedRoom
     }
-
     console.log("Query Data:", data);
-
     this.webService.getQuery(
       this.startSelectedDate.toISOString(),
       this.endSelectedDate.toISOString(),
@@ -135,10 +138,21 @@ export class AppComponent {
       this.selectedInterval
     ).subscribe(
       next => {
-        console.log("Query Data:", next);
+        this.queryResponse = next;
+        const uniqueValues = new Set();
+        if (this.queryResponse) {
+          this.queryResponse.forEach(
+              (element: any) => {
+              if (element.start) {
+                uniqueValues.add(element.start);
+              }
+            }
+          )
+        }
+        this.valueArray = Array.from(uniqueValues) as string[];
+        console.log("Query Response:", this.queryResponse);
       }
     )
-
   }
 
   toggleLoadingAnimation(): void {
@@ -154,5 +168,13 @@ export class AppComponent {
   onSensorChange(value: any): void {
     console.log("Sensor:", value.value);
     this.selectedSensor = value.value;
+  }
+
+  getSliderValue(): string {
+    return this.valueArray[this.sliderIndex];
+  }
+
+  onSliderChange(event: any) {
+    this.sliderIndex = event.value;
   }
 }

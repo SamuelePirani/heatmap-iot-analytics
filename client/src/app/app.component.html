@@ -6,7 +6,7 @@
         class="logo-header"
         src="assets/unicamLogo.png"
       />
-      <h5>Unicam Pole - Heatmap Analytic</h5>
+      <h5>Unicam Campus - Heatmap Analytic</h5>
     </div>
   </nb-layout-header>
 
@@ -97,7 +97,6 @@
               (click)="onQueryButtonClick()">
         Query
       </button>
-      <button nbButton status="basic" (click)="openLoginModal()"> Setting</button>
 
     </div>
   </nb-sidebar>
@@ -106,11 +105,16 @@
     <app-heatmap
       *ngIf="isBrowser"
       [geoJsonUrl]="selectedFloor"
-    ></app-heatmap>
+    />
 
-    <div class="card flex justify-center">
-      <p-slider [(ngModel)]="value" styleClass="w-56"/>
-    </div>
+    <nb-card *ngIf="queryResponse">
+      <nb-card-body>
+        <input type="text" nbInput fullWidth [value]="getSliderValue() || ''" class="w-full mb-4" readonly />
+
+        <p-slider [(ngModel)]="sliderIndex" [min]="0" [max]="valueArray.length - 1"
+                  (onChange)="onSliderChange($event)" styleClass="w-56" />
+      </nb-card-body>
+    </nb-card>
 
   </nb-layout-column>
 </nb-layout>

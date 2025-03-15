@@ -24,6 +24,7 @@ import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { SliderModule } from 'primeng/slider';
+import {InputText} from 'primeng/inputtext';
 
 
 @NgModule({
@@ -53,7 +54,8 @@ import { SliderModule } from 'primeng/slider';
     SliderModule,
     FormsModule,
     NbDatepickerModule.forRoot(),
-    NbSpinnerModule
+    NbSpinnerModule,
+    InputText
   ],
     providers: [
         provideClientHydration(withEventReplay()),
