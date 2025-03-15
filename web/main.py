@@ -11,13 +11,10 @@ def connect_to_mongo():
     MONGO_URL = os.environ.get("MONGO_URL")
     MONGO_PASSWORD = os.environ.get("MONGO_PASSWORD")
     MONGO_USERNAME = os.environ.get("MONGO_USERNAME")
-
-    # Connect to MongoDB
     client = pymongo.MongoClient(
         f"mongodb+srv://{MONGO_USERNAME}:{MONGO_PASSWORD}@{MONGO_URL}/test?retryWrites=true&w=majority",
         server_api=ServerApi('1'), socketTimeoutMS=5000, connectTimeoutMS=5000
     )
-
     try:
         client.db_name.command('ping')
     except Exception as e:
@@ -48,29 +45,21 @@ def main():
         return jsonify(list(db[f'interval_30'].aggregate(pipeline))[0])
 
     @app.route('/data_room', methods=['GET'])
-    def get_sensors():
-
+    def get_data():
         room_name = request.args.get('room_name')
         interval = request.args.get('interval')
         start = request.args.get('start')
         end = request.args.get('end')
-
         if not interval or not start or not end:
             return jsonify({"error": "Parameters 'interval', 'start' and 'end' are mandatory"}), 400
-
         start = fix_date_format(start)
         end = fix_date_format(end)
-
+        print(start, end)
         query = {"start": {"$gte": datetime.fromisoformat(start)}, "end": {"$lte": datetime.fromisoformat(end)}}
-
-        if room_name:
+        if room_name and room_name != "":
             query["room_name"] = room_name
-
-        print(query)
-
         sensors = list(db[f"interval_{interval}"].find(query, {"_id": 0}))
         return jsonify(sensors)
-
     app.run()
 
 
