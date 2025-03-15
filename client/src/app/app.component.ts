@@ -1,4 +1,4 @@
-import {Component, Inject, PLATFORM_ID} from '@angular/core';
+import {Component, Inject, PLATFORM_ID, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {isPlatformBrowser} from '@angular/common';
 import GeoJSON from 'ol/format/GeoJSON';
@@ -6,6 +6,7 @@ import {DataService} from "./data.service";
 import {LoginComponent} from './login/login.component';
 import {NbDialogService} from '@nebular/theme';
 import {WebService} from '../services/web.service';
+import {HeatmapComponent} from './heatmap/heatmap.component';
 
 interface Floor {
   id: string;
@@ -44,11 +45,11 @@ export class AppComponent {
   selectedSensor: string | null = null;
   selectedInterval: number = 0;
 
-  minDate: Date = new Date('2013-8-23');
-  maxDate: Date = new Date('2013-9-01');
+  minDate: Date | null = null;
+  maxDate: Date | null = null;
 
-  selectedStartDate =  this.minDate;
-  selectedEndDate =  this.maxDate;
+  selectedStartDate = this.minDate;
+  selectedEndDate = this.maxDate;
 
   queryResponse: any = null;
 
@@ -64,12 +65,20 @@ export class AppComponent {
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
     this.fetchRooms(this.selectedFloor);
+    this.selectedSensor = 'Temperature';
+    this.selectedInterval = 30;
 
     try {
       this.webService.getRange().subscribe(
         next => {
-          this.maxDate = new Date(next['max_end_date']);
-          this.minDate = new Date(next['min_start_date']);
+          const max = new Date(next['max_end_date']);
+          const min = new Date(next['min_start_date']);
+          this.maxDate = max;
+          this.minDate = min;
+          this.selectedStartDate = this.minDate;
+          this.selectedEndDate = this.maxDate;
+          this.onStartDateChange(min)
+          this.onEndDateChange(max)
         }
       )
     } catch (error) {
@@ -93,10 +102,6 @@ export class AppComponent {
     this.fetchRooms(newFloorUrl);
   }
 
-  openLoginModal(): void {
-    this.dialogService.open(LoginComponent);
-  }
-
   onStartDateChange(event: any): void {
     this.startSelectedDate = event;
     console.log("Start Date:", this.startSelectedDate);
@@ -107,6 +112,8 @@ export class AppComponent {
     console.log("End Date:", event);
   }
 
+  @ViewChild(HeatmapComponent) heatmapComponent?: HeatmapComponent;
+
   onQueryButtonClick(): void {
     this.toggleLoadingAnimation()
     if (!this.selectedFloor) {
@@ -114,7 +121,7 @@ export class AppComponent {
       return;
     }
     if (!this.startSelectedDate || !this.endSelectedDate) {
-      alert('Please select start and end dates');
+      alert('Please select start and end dates, current values are: ' + this.startSelectedDate + ' ' + this.endSelectedDate);
       return;
     }
     if (!this.selectedSensor) {
@@ -132,7 +139,7 @@ export class AppComponent {
       'interval': this.selectedInterval,
       'room': this.selectedRoom
     }
-    console.log("Query Data:", data);
+    this.queryResponse = null;
     this.webService.getQuery(
       this.startSelectedDate.toISOString(),
       this.endSelectedDate.toISOString(),
@@ -144,7 +151,7 @@ export class AppComponent {
         this.queryResponse = next;
         if (this.queryResponse) {
           this.queryResponse.forEach(
-              (element: any) => {
+            (element: any) => {
               if (element.start) {
                 if (!this.valueArray.includes(element.start)) {
                   this.valueArray.push(element.start);
@@ -153,7 +160,7 @@ export class AppComponent {
             }
           )
         }
-        console.log("Query Response:", this.queryResponse);
+        this.updateHeatmap();
       }
     )
   }
@@ -179,5 +186,12 @@ export class AppComponent {
 
   onSliderChange(event: any) {
     this.sliderIndex = event.value;
+    this.updateHeatmap()
+  }
+
+  private updateHeatmap(): void {
+    if (this.heatmapComponent) {
+      this.heatmapComponent.createHeatmap(this.queryResponse, 'temperature', this.getSliderValue() ?? '');
+    }
   }
 }

@@ -35,6 +35,7 @@
         <nb-select
           id="sel-int"
           placeholder="Choose time intervals"
+          selected [selected]="selectedInterval"
           (selectedChange)="onTimeIntervalChange($event)"
         >
           <nb-option
@@ -50,6 +51,7 @@
         SENSOR TYPE
         <nb-select
           id="sel-sensor"
+          selected [selected]="selectedSensor"
           placeholder="Choose sensor type"
         >
           <nb-option

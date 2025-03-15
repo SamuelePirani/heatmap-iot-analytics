@@ -7,91 +7,160 @@ import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import VectorLayer from 'ol/layer/Vector';
 import {Fill, Stroke, Style, Text} from 'ol/style';
+import {Heatmap} from 'ol/layer';
 
 @Component({
-    selector: 'app-heatmap',
-    standalone: false,
-    templateUrl: './heatmap.component.html',
-    styleUrls: ['./heatmap.component.scss'],
+  selector: 'app-heatmap',
+  standalone: false,
+  templateUrl: './heatmap.component.html',
+  styleUrls: ['./heatmap.component.scss'],
 })
 export class HeatmapComponent implements OnChanges {
-    @Input() geoJsonUrl!: string;
+  @Input() geoJsonUrl!: string;
 
-    private map?: Map;
-    private vectorSource?: VectorSource;
+  private map?: Map;
+  private vectorSource?: VectorSource;
 
-    constructor(@Inject(PLATFORM_ID) private readonly platformId: object) {
+  constructor(@Inject(PLATFORM_ID) private readonly platformId: object) {
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['geoJsonUrl']) {
+      if (this.map) {
+        this.updateHeatmap();
+      } else {
+        this.initializeMap();
+      }
     }
+  }
 
-    ngOnChanges(changes: SimpleChanges): void {
-        if (changes['geoJsonUrl']) {
-            if (this.map) {
-                this.updateHeatmap();
-            } else {
-                this.initializeMap();
-            }
+  private normalizeValue(value: number, min: number, max: number): number {
+    return (value - min) / (max - min)
+  }
+
+  private getMinAndMaxValuesFromData(data: any[], selectedSensor: string) {
+    let min = Infinity
+    let max = -Infinity
+
+    data.forEach((item) => {
+      const sensors = item['sensors']
+      for (let i = 0; i < sensors.length; i++) {
+        const sensorsData = sensors[i]
+        if (sensorsData['type'] === selectedSensor) {
+          min = Math.min(min, sensorsData['min'])
+          max = Math.max(max, sensorsData['max'])
         }
-    }
+      }
+    })
+    return {min, max}
+  }
 
-    private initializeMap(): void {
-        this.vectorSource = new VectorSource({
-            url: this.geoJsonUrl,
-            format: new GeoJSON(),
-        });
+  public createHeatmap(data: any[], selectedSensor: string, startDate: string): void {
+    const allFeatures = this.vectorSource?.getFeatures() ?? [];
+    const pointFeatures = allFeatures.filter((feature) => {
+      if (feature && feature.getGeometry()) {
+        return feature.getGeometry()?.getType() === 'Point';
+      }
+      return false;
+    });
 
-        const vectorLayer = this.createVectorLayer();
-
-        this.map = new Map({
-            target: 'heatmap',
-            layers: [
-                new TileLayer({source: new OSM()}),
-                vectorLayer,
-            ],
-            view: new View({
-                center: [0, 0],
-                zoom: 2,
-                minZoom: 19,
-                maxZoom: 21,
-            }),
-        });
-
-        this.vectorSource.once('change', () => {
-            const features = this.vectorSource?.getFeatures() ?? [];
-            if (features.length > 0) {
-                // @ts-ignore
-                const extent = this.vectorSource.getExtent();
-                this.map?.getView().fit(extent, {
-                    padding: [20, 20, 20, 20],
-                    maxZoom: 21,
-                });
+    const minAndMax = this.getMinAndMaxValuesFromData(data, selectedSensor)
+    const min = minAndMax.min
+    const max = minAndMax.max
+    pointFeatures.forEach((feature) => {
+      const type = feature.get('type').split(' ')[0];
+      if (type === selectedSensor) {
+        const room = feature.get('room');
+        const filteredData = data.filter((item) => {
+          return room === item['room_name'] && new Date(item['start']).getTime() === new Date(startDate).getTime()
+        })[0]
+        let value = 0
+        if (filteredData) {
+          const sensors = filteredData['sensors']
+          for (let i = 0; i < sensors.length; i++) {
+            const sensorsData = sensors[i]
+            if (sensorsData['type'] === selectedSensor) {
+              value = sensorsData['mean']
             }
-        });
-    }
+          }
+        }
+        feature.set('intensity', this.normalizeValue(value, min, max))
+      }
+    })
 
-    private createVectorLayer(): VectorLayer {
-        return new VectorLayer({
-            source: this.vectorSource,
-            style: (feature) => new Style({
-                fill: new Fill({color: 'rgba(0,0,0,0.1)'}),
-                stroke: new Stroke({
-                    color: '#000000',
-                    width: 2,
-                }),
-                text: new Text({
-                    text: feature.get('type') === 'Room' ? feature.get('name') || '' : '',
-                    font: '14px Arial',
-                    fill: new Fill({color: '#000'}),
-                    stroke: new Stroke({
-                        color: '#fff',
-                        width: 2,
-                    }),
-                }),
-            }),
-        });
-    }
+    const pointSource = new VectorSource({
+      features: pointFeatures,
+    });
 
-    private updateHeatmap(): void {
-        this.vectorSource?.setUrl(this.geoJsonUrl);
-        this.vectorSource?.refresh();
-    }
+    const heatmapLayer = new Heatmap({
+      source: pointSource,
+      blur: 10,
+      radius: 50,
+      opacity: 0.45,
+      weight: (feature) => feature.get('intensity') || 0
+    })
+    this.map?.addLayer(heatmapLayer)
+  }
+
+  private initializeMap(): void {
+    this.vectorSource = new VectorSource({
+      url: this.geoJsonUrl,
+      format: new GeoJSON(),
+    });
+
+    const vectorLayer = this.createVectorLayer();
+
+    this.map = new Map({
+      target: 'heatmap',
+      layers: [
+        new TileLayer({source: new OSM()}),
+        vectorLayer,
+      ],
+      view: new View({
+        center: [0, 0],
+        zoom: 2,
+        minZoom: 19,
+        maxZoom: 21,
+      }),
+    });
+
+    this.vectorSource.once('change', () => {
+      const features = this.vectorSource?.getFeatures() ?? [];
+      if (features.length > 0) {
+        // @ts-ignore
+        const extent = this.vectorSource.getExtent();
+        this.map?.getView().fit(extent, {
+          padding: [20, 20, 20, 20],
+          maxZoom: 21,
+        });
+      }
+    });
+  }
+
+  private createVectorLayer(): VectorLayer {
+    return new VectorLayer({
+      source: this.vectorSource,
+      style: (feature) => new Style({
+        fill: new Fill({color: 'rgba(0,0,0,0.1)'}),
+        stroke: new Stroke({
+          color: '#000000',
+          width: 2,
+        }),
+        text: new Text({
+          text: feature.get('type') === 'Room' ? feature.get('name') || '' : '',
+          font: '14px Arial',
+          fill: new Fill({color: '#000'}),
+          stroke: new Stroke({
+            color: '#fff',
+            width: 2,
+          }),
+        }),
+      }),
+    });
+  }
+
+  private updateHeatmap(): void {
+    this.vectorSource?.setUrl(this.geoJsonUrl);
+    this.vectorSource?.refresh();
+  }
 }
