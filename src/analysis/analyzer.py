@@ -100,6 +100,7 @@ def save_to_mongodb(intervals_analyzed, client):
                 documents.append(entry)
 
         if documents:
+            collection.delete_many({})
             collection.insert_many(documents)
             logger.info(f"Inserted {len(documents)} documents for interval {interval} into MongoDB")
 
