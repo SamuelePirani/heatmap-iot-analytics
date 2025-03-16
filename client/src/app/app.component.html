@@ -64,22 +64,6 @@
         </nb-select>
       </label>
 
-      <label class="sel-item" for="sel-room">
-        ROOM
-        <nb-select
-          [(selected)]="selectedRoom"
-          id="sel-room"
-          placeholder="Choose room"
-        >
-          <nb-option
-            *ngFor="let room of rooms"
-            [value]="room"
-          >
-            {{ room }}
-          </nb-option>
-        </nb-select>
-      </label>
-
       <label class="sel-item">
         START DATE
         <input nbInput placeholder="Start Date" [nbDatepicker]="datepicker" [(ngModel)]="selectedStartDate">
@@ -115,6 +99,18 @@
 
         <p-slider [(ngModel)]="sliderIndex" [min]="0" [max]="valueArray.length - 1"
                   (onChange)="onSliderChange($event)" styleClass="w-56" />
+        <nb-layout>
+          <nb-layout-column>
+            <nb-card>
+              <nb-card-header>
+                Max
+              </nb-card-header>
+              <nb-card-body>
+                {{ max }}
+              </nb-card-body>
+            </nb-card>
+          </nb-layout-column>
+        </nb-layout>
       </nb-card-body>
     </nb-card>
 
