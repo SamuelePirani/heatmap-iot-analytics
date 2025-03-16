@@ -99,7 +99,7 @@
         <p-slider [(ngModel)]="sliderIndex" [min]="0" [max]="valueArray.length - 1"
                   (onChange)="onSliderChange($event)" styleClass="w-56" />
       </nb-card-body>
-      <app-data-table [min]="1" [max] = "2" />
+      <app-data-table [roomData]="roomData"/>
     </nb-card>
 
   </nb-layout-column>

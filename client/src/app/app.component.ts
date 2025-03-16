@@ -152,7 +152,7 @@ export class AppComponent {
       next: (data: any) => {
         this.queryResponse = data;
         if (this.queryResponse) {
-          if(this.valueArray.length != 0){
+          if (this.valueArray.length != 0) {
             this.valueArray = []
           }
           this.queryResponse.forEach(
@@ -170,6 +170,7 @@ export class AppComponent {
         this.updateMinAndMaxValuesFromData(this.queryResponse, this.getSelectedSensor());
         this.updateHeatmap();
         this.toggleLoadingAnimation()
+        this.updateDataTable()
       },
       error: (error: any) => {
         this.showErrorToast('Error fetching data ' + error, 'Server Error')
@@ -206,6 +207,7 @@ export class AppComponent {
       this.max = -Infinity;
       this.updateMinAndMaxValuesFromData(this.queryResponse, this.getSelectedSensor());
       this.updateHeatmap();
+      this.updateDataTable()
     }
   }
 
@@ -216,14 +218,15 @@ export class AppComponent {
   onSliderChange(event: any) {
     this.sliderIndex = event.value;
     this.updateHeatmap()
+    this.updateDataTable()
   }
 
-  private getSelectedSensor(): string {
+  public getSelectedSensor(): string {
     return this.selectedSensor?.toLowerCase() ?? '';
   }
 
-  private removeOldData(): void{
-    if(this.queryResponse){
+  private removeOldData(): void {
+    if (this.queryResponse) {
       this.queryResponse = null;
       this.heatmapComponent?.removeHeatmapLayer();
     }
@@ -260,6 +263,29 @@ export class AppComponent {
       destroyByClick: true,
       preventDuplicates: true,
     })
+  }
+
+  roomData: { room_name: string, min: number, max: number, avg: number }[] = []
+
+  public updateDataTable(): void {
+    if (this.queryResponse && this.getSliderValue()) {
+      const newRoomData: { room_name: string, min: number, max: number, avg: number }[] = []
+      const filteredData = this.queryResponse.filter((item: any) => {
+        return this.rooms.includes(item['room_name']) && new Date(item['start']).getTime() === new Date(this.getSliderValue()).getTime()
+      })
+      filteredData.forEach((item: any) => {
+        const sensors = item['sensors']
+        sensors.filter((sensor: any) => sensor['type'] === this.getSelectedSensor()).forEach((s: any) => {
+          newRoomData.push({
+            room_name: item['room_name'],
+            min: s['min'],
+            max: s['max'],
+            avg: s['mean']
+          })
+        })
+      })
+      this.roomData = newRoomData
+    }
   }
 
 }
