@@ -52,12 +52,12 @@
         <nb-select
           id="sel-sensor"
           selected [selected]="selectedSensor"
+          (selectedChange)="onSensorChange($event)"
           placeholder="Choose sensor type"
         >
           <nb-option
             *ngFor="let sensor of sensors"
             [value]="sensor"
-            (selectionChange)="onSensorChange($event)"
           >
             {{ sensor }}
           </nb-option>
@@ -99,20 +99,22 @@
 
         <p-slider [(ngModel)]="sliderIndex" [min]="0" [max]="valueArray.length - 1"
                   (onChange)="onSliderChange($event)" styleClass="w-56" />
-        <nb-layout>
-          <nb-layout-column>
-            <nb-card>
-              <nb-card-header>
-                Max
-              </nb-card-header>
-              <nb-card-body>
-                {{ max }}
-              </nb-card-body>
-            </nb-card>
-          </nb-layout-column>
-        </nb-layout>
       </nb-card-body>
     </nb-card>
+
+
+    <nb-layout>
+      <nb-layout-column>
+        <nb-card>
+          <nb-card-header>
+            Max
+          </nb-card-header>
+          <nb-card-body>
+            {{ max }}
+          </nb-card-body>
+        </nb-card>
+      </nb-layout-column>
+    </nb-layout>
 
   </nb-layout-column>
 </nb-layout>

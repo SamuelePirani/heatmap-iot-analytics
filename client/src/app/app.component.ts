@@ -96,6 +96,8 @@ export class AppComponent {
     console.log("Changed Floor:", this.selectedFloor);
     this.selectedRoom = '';
     this.fetchRooms(newFloorUrl);
+    this.queryResponse = null;
+    this.heatmapComponent?.removeHeatmapLayer();
   }
 
   onStartDateChange(event: any): void {
@@ -193,8 +195,8 @@ export class AppComponent {
   }
 
   onSensorChange(value: any): void {
-    console.log("Sensor:", value.value);
-    this.selectedSensor = value.value;
+    console.log("Sensor:", value);
+    this.selectedSensor = value;
     if (this.queryResponse) {
       this.min = Infinity;
       this.max = -Infinity;
@@ -218,6 +220,7 @@ export class AppComponent {
 
   private updateHeatmap(): void {
     if (this.heatmapComponent) {
+      this.heatmapComponent.removeHeatmapLayer()
       this.heatmapComponent.createHeatmap(this.queryResponse, this.getSelectedSensor(), this.getSliderValue() ?? '', this.min, this.max);
     }
   }

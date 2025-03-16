@@ -40,6 +40,9 @@ export class HeatmapComponent implements OnChanges {
 
   public createHeatmap(data: any[], selectedSensor: string, startDate: string, min:number, max:number): void {
     const allFeatures = this.vectorSource?.getFeatures() ?? [];
+
+    const pointSource = new VectorSource();
+
     const pointFeatures = allFeatures.filter((feature) => {
       if (feature && feature.getGeometry()) {
         return feature.getGeometry()?.getType() === 'Point';
@@ -65,18 +68,15 @@ export class HeatmapComponent implements OnChanges {
           }
         }
         feature.set('intensity', this.normalizeValue(value, min, max))
+        pointSource.addFeature(feature.clone());
       }
     })
-
-    const pointSource = new VectorSource({
-      features: pointFeatures,
-    });
 
     const heatmapLayer = new Heatmap({
       source: pointSource,
       blur: 10,
       radius: 50,
-      opacity: 0.45,
+      opacity: 0.80,
       weight: (feature) => feature.get('intensity') || 0
     })
     this.map?.addLayer(heatmapLayer)
@@ -138,6 +138,17 @@ export class HeatmapComponent implements OnChanges {
       }),
     });
   }
+
+  public removeHeatmapLayer(): void{
+    console.log('Prima:', this.map?.getLayers().getArray());
+    this.map?.getLayers().forEach((layer) => {
+      if (layer instanceof Heatmap) {
+        this.map?.removeLayer(layer);
+      }
+    });
+    console.log('Dopo:', this.map?.getLayers().getArray());
+  }
+
 
   private updateHeatmap(): void {
     this.vectorSource?.setUrl(this.geoJsonUrl);
