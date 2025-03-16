@@ -96,17 +96,18 @@ export class AppComponent {
     console.log("Changed Floor:", this.selectedFloor);
     this.selectedRoom = '';
     this.fetchRooms(newFloorUrl);
-    this.queryResponse = null;
-    this.heatmapComponent?.removeHeatmapLayer();
+    this.removeOldData()
   }
 
   onStartDateChange(event: any): void {
     this.startSelectedDate = event;
+    this.removeOldData()
     console.log("Start Date:", this.startSelectedDate);
   }
 
   onEndDateChange(event: any): void {
     this.endSelectedDate = event;
+    this.removeOldData();
     console.log("End Date:", event);
   }
 
@@ -151,6 +152,9 @@ export class AppComponent {
       next: (data: any) => {
         this.queryResponse = data;
         if (this.queryResponse) {
+          if(this.valueArray.length != 0){
+            this.valueArray = []
+          }
           this.toggleLoadingAnimation()
           this.queryResponse.forEach(
             (element: any) => {
@@ -191,6 +195,7 @@ export class AppComponent {
 
   onTimeIntervalChange(value: any): void {
     console.log("Time Interval:", value);
+    this.removeOldData();
     this.selectedInterval = value;
   }
 
@@ -216,6 +221,13 @@ export class AppComponent {
 
   private getSelectedSensor(): string {
     return this.selectedSensor?.toLowerCase() ?? '';
+  }
+
+  private removeOldData(): void{
+    if(this.queryResponse){
+      this.queryResponse = null;
+      this.heatmapComponent?.removeHeatmapLayer();
+    }
   }
 
   private updateHeatmap(): void {

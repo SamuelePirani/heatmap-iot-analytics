@@ -140,13 +140,11 @@ export class HeatmapComponent implements OnChanges {
   }
 
   public removeHeatmapLayer(): void{
-    console.log('Prima:', this.map?.getLayers().getArray());
     this.map?.getLayers().forEach((layer) => {
       if (layer instanceof Heatmap) {
         this.map?.removeLayer(layer);
       }
     });
-    console.log('Dopo:', this.map?.getLayers().getArray());
   }
 
 
