@@ -16,7 +16,7 @@ export class WebService {
     return this.http.get(this.apiUrl + 'range');
   }
 
-  getQuery(start: string, end: string, room: string | null, sensor: string, interval: number): Observable<any> {
+  getQuery(start: string, end: string, room: string | null, interval: number): Observable<any> {
     const isoStart = new Date(start).toISOString();
     const isoEnd = new Date(end).toISOString();
     const params = new HttpParams()
