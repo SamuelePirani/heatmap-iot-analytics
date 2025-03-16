@@ -4,6 +4,7 @@ import {isPlatformBrowser} from '@angular/common';
 import GeoJSON from 'ol/format/GeoJSON';
 import {WebService} from '../services/web.service';
 import {HeatmapComponent} from './heatmap/heatmap.component';
+import {NbGlobalPhysicalPosition, NbToastrService} from '@nebular/theme';
 
 interface Floor {
   id: string;
@@ -56,31 +57,29 @@ export class AppComponent {
   constructor(
     @Inject(PLATFORM_ID) private readonly platformId: object,
     private readonly http: HttpClient,
-    private readonly dataService: DataService,
-    private dialogService: NbDialogService,
+    private toasterService: NbToastrService,
     private webService: WebService
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
     this.fetchRooms(this.selectedFloor);
     this.selectedSensor = 'Temperature';
     this.selectedInterval = 30;
-
-    try {
-      this.webService.getRange().subscribe(
-        next => {
-          const max = new Date(next['max_end_date']);
-          const min = new Date(next['min_start_date']);
+    this.webService.getRange().subscribe({
+        next: (data: any) => {
+          const max = new Date(data['max_end_date']);
+          const min = new Date(data['min_start_date']);
           this.maxDate = max;
           this.minDate = min;
           this.selectedStartDate = this.minDate;
           this.selectedEndDate = this.maxDate;
           this.onStartDateChange(min)
           this.onEndDateChange(max)
+        },
+        error: (error: any) => {
+          this.showErrorToast('Error fetching data ' + error, 'Server Error')
         }
-      )
-    } catch (error) {
-      console.error("Error fetching range data:", error);
-    }
+      }
+    )
   }
 
   fetchRooms(geoJsonUrl: string): void {
@@ -111,35 +110,46 @@ export class AppComponent {
 
   @ViewChild(HeatmapComponent) heatmapComponent?: HeatmapComponent;
 
-  onQueryButtonClick(): void {
-    this.toggleLoadingAnimation()
+  private getQueryParamsIfValid(): { start: string, end: string, room: string, interval: number } | null {
     if (!this.selectedFloor) {
-      alert('Please select a floor');
-      return;
+      this.showErrorToast('Please select a floor', 'Missing Field')
+      this.toggleLoadingAnimation()
+      return null;
     }
     if (!this.startSelectedDate || !this.endSelectedDate) {
-      alert('Please select start and end dates, current values are: ' + this.startSelectedDate + ' ' + this.endSelectedDate);
-      return;
+      this.showErrorToast('Please select start and end dates', 'Missing Field')
+      this.toggleLoadingAnimation()
+      return null;
     }
     if (!this.selectedSensor) {
-      alert('Please select a sensor');
-      return
+      this.showErrorToast('Please select a sensor', 'Missing Field')
+      this.toggleLoadingAnimation()
+      return null;
     }
     if (!this.intervals.includes(this.selectedInterval)) {
-      alert('Please select a time interval');
-      return
+      this.showErrorToast('Please select a time interval', 'Missing Field')
+      this.toggleLoadingAnimation()
+      return null
     }
-    this.queryResponse = null;
+    return {
+      start: this.startSelectedDate.toISOString(),
+      end: this.endSelectedDate.toISOString(),
+      room: this.selectedRoom,
+      interval: this.selectedInterval
+    }
+  }
+
+  private runGetQuery(params: { start: string, end: string, room: string, interval: number }): void {
     this.webService.getQuery(
-      this.startSelectedDate.toISOString(),
-      this.endSelectedDate.toISOString(),
-      this.selectedRoom,
-      this.selectedSensor,
-      this.selectedInterval
-    ).subscribe(
-      next => {
-        this.queryResponse = next;
+      params.start,
+      params.end,
+      params.room,
+      params.interval
+    ).subscribe({
+      next: (data: any) => {
+        this.queryResponse = data;
         if (this.queryResponse) {
+          this.toggleLoadingAnimation()
           this.queryResponse.forEach(
             (element: any) => {
               if (element.start) {
@@ -154,13 +164,27 @@ export class AppComponent {
         this.max = -Infinity;
         this.updateMinAndMaxValuesFromData(this.queryResponse, this.getSelectedSensor());
         this.updateHeatmap();
+        this.toggleLoadingAnimation()
+      },
+      error: (error: any) => {
+        this.showErrorToast('Error fetching data ' + error, 'Server Error')
+        this.toggleLoadingAnimation()
       }
-    )
+    })
+  }
+
+
+  onQueryButtonClick(): void {
+    this.toggleLoadingAnimation()
+    const params = this.getQueryParamsIfValid()
+    if (params !== null) {
+      this.queryResponse = null;
+      this.runGetQuery(params)
+    }
   }
 
   toggleLoadingAnimation(): void {
-    this.loading = true;
-    setTimeout(() => this.loading = false, 3000);
+    this.loading = !this.loading;
   }
 
   onTimeIntervalChange(value: any): void {
@@ -213,4 +237,15 @@ export class AppComponent {
       }
     })
   }
+
+  private showErrorToast(message: string, title?: string) {
+    this.toasterService.danger(message, title, {
+      limit: 3,
+      duration: 3000,
+      position: NbGlobalPhysicalPosition.BOTTOM_RIGHT,
+      destroyByClick: true,
+      preventDuplicates: true,
+    })
+  }
+
 }
