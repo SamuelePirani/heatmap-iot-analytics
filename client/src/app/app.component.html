@@ -1,0 +1,106 @@
+<nb-layout>
+  <nb-layout-header fixed>
+    <div class="header-layout">
+      <img
+        alt="Logo of University of Camerino"
+        class="logo-header"
+        src="assets/unicamLogo.png"
+      />
+      <h5>Unicam Campus - Heatmap Analytic</h5>
+    </div>
+  </nb-layout-header>
+
+  <nb-sidebar>
+    <div class="sel-items-box">
+
+      <label class="sel-item" for="sel-floor">
+        FLOOR
+        <nb-select
+          (selectedChange)="onFloorChange($event)"
+          [(selected)]="selectedFloor"
+          id="sel-floor"
+          placeholder="Choose a floor"
+        >
+          <nb-option
+            *ngFor="let floor of floors"
+            [value]="floor.geoJsonUrl"
+          >
+            {{ floor.name }}
+          </nb-option>
+        </nb-select>
+      </label>
+
+      <label class="sel-item" for="sel-int">
+        TIME INTERVAL
+        <nb-select
+          id="sel-int"
+          placeholder="Choose time intervals"
+          selected [selected]="selectedInterval"
+          (selectedChange)="onTimeIntervalChange($event)"
+        >
+          <nb-option
+            *ngFor="let interval of intervals"
+            [value]="interval"
+          >
+            {{ interval }}
+          </nb-option>
+        </nb-select>
+      </label>
+
+      <label class="sel-item" for="sel-sensor">
+        SENSOR TYPE
+        <nb-select
+          id="sel-sensor"
+          selected [selected]="selectedSensor"
+          (selectedChange)="onSensorChange($event)"
+          placeholder="Choose sensor type"
+        >
+          <nb-option
+            *ngFor="let sensor of sensors"
+            [value]="sensor"
+          >
+            {{ sensor }}
+          </nb-option>
+        </nb-select>
+      </label>
+
+      <label class="sel-item">
+        START DATE
+        <input nbInput placeholder="Start Date" [nbDatepicker]="datepicker" [(ngModel)]="selectedStartDate">
+        <nb-datepicker [min]="minDate" [max]="maxDate"  (dateChange)="onStartDateChange($event)" #datepicker></nb-datepicker>
+      </label>
+
+      <label class="sel-item">
+        END DATE
+        <input nbInput placeholder="End Date" [nbDatepicker]="datepicker2" [(ngModel)]="selectedEndDate">
+        <nb-datepicker [min]="minDate" [max]="maxDate"  (dateChange)="onEndDateChange($event)" #datepicker2></nb-datepicker>
+      </label>
+
+      <button nbButton
+              status="basic"
+              [nbSpinner]="loading"
+              nbSpinnerStatus="info"
+              (click)="onQueryButtonClick()">
+        Query
+      </button>
+    </div>
+  </nb-sidebar>
+
+  <nb-layout-column>
+    <app-heatmap
+      *ngIf="isBrowser"
+      [geoJsonUrl]="selectedFloor"
+    />
+
+    <nb-card *ngIf="queryResponse" class = "no-margin-card">
+      <nb-card-body>
+        <input type="text" nbInput fullWidth [value]="getSliderValue() || ''" class="w-full mb-4" readonly />
+
+        <p-slider [(ngModel)]="sliderIndex" [min]="0" [max]="valueArray.length - 1"
+                  (onChange)="onSliderChange($event)" styleClass="w-56" />
+      </nb-card-body>
+      <app-data-table [roomData]="roomData"/>
+    </nb-card>
+
+  </nb-layout-column>
+</nb-layout>

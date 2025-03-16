@@ -1,10 +1,8 @@
 # Heat-map Analytics
 
-This project develops an analytics pipeline to generate geolocated heat maps based on time-series IoT data.  
-In the time series, you will find temporal data about IoT events, while the geolocation information is stored
-separately.  
-Our goal is to integrate these two sources, aggregate data over time windows, and produce a geo-heat map
-visualization tool.
+This project creates an analytics pipeline to generate geolocated heat maps based on time-series IoT data.  
+By integrating temporal data (IoT events) with corresponding geolocation data, the pipeline aggregates information over
+selected time windows and visualizes it on a geo-heat map.
 
 ![Heat-map Visualization](docs/images/Figure1.png)
 
@@ -15,11 +13,12 @@ visualization tool.
 - [Prerequisites](#prerequisites)
     - [JDK 17 Installation](#jdk-17-installation)
     - [Conda Installation](#conda-installation)
+- [Repository Structure](#repository-structure)
 - [Environment Setup](#environment-setup)
-    - [Cloning the Repository](#cloning-the-repository)
-    - [Creating/Updating the Conda Environment](#creatingupdating-the-conda-environment)
+    - [Creating or Updating the Conda Environment](#creating-or-updating-the-conda-environment)
     - [Configuring MongoDB Connection Variables](#configuring-mongodb-connection-variables)
-- [Running the Application](#running-the-application)
+- [Running the Backend Application](#running-the-backend-application)
+- [Running the Angular Client](#running-the-angular-client)
 - [Additional Notes](#additional-notes)
 
 ---
@@ -28,93 +27,117 @@ visualization tool.
 
 ### JDK 17 Installation
 
-The project relies on Java-based components. To install JDK 17 or later:
+The project includes Java-based components. To install JDK 17 or a compatible version:
 
-1. Visit the official website of your preferred JDK distributor. For example, you can use:
-    - [Oracle JDK 17 Downloads](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
-2. Download and run the installer for your operating system.
-3. Verify the installation by running:
+1. Download a JDK (e.g., [Oracle JDK 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)).
+2. Run the installer.
+3. Verify your setup:
    ```bash
    java --version
    ```
-4. Ensure that the `JAVA_HOME` environment variable is correctly set to your JDK installation path.
+4. Ensure the `JAVA_HOME` environment variable points to the JDK installation path.
 
 ### Conda Installation
 
 If you do not have Conda installed:
 
-1. Download and install [Anaconda](https://www.anaconda.com/download) by following the instructions on the website.
-2. Confirm that Conda is added to your system’s PATH or configure it manually.
+1. Download and install [Anaconda](https://www.anaconda.com/download).
+2. Confirm Conda is accessible via your system’s PATH.
+
+---
+
+## Repository Structure
+
+A brief overview of key folders:
+
+- **src/api/**  
+  Contains the Python/Flask application and environment files.
+- **client/**  
+  Contains the Angular application for UI and data visualization.
+- **web/**
+  Contains the service Web API that starts the frontend.
+- **heatmap-iot-analytics/**  
+  Documentation and images (including heat map examples).
 
 ---
 
 ## Environment Setup
 
-### Cloning the Repository
+### Creating or Updating the Conda Environment
 
-Clone the project repository to your local machine:
+In the root folder (`heatmap-iot-analytics/`), an `environment.yml` file is provided to manage Python
+dependencies:
 
-```bash
-git clone https://github.com/SamuelePirani/HeatMap---TBDM2425.git
-cd HeatMap---TBDM2425
-```
+- **Cloning the Project**
 
-### Creating/Updating the Conda Environment
+  ```bash
+  git clone https://github.com/SamuelePirani/heatmap-iot-analytics.git
+  ```
 
-Use the provided `environment.yml` file to create (or update) the Conda environment with all necessary dependencies:
+  ```bash
+  cd heatmap-iot-analytics
+  ```
 
-- **Creating the environment:**
+- **Creating the environment**:
 
   ```bash
   conda env create -f environment.yml
   ```
 
-- **Updating an existing environment:**
+- **Updating an existing environment**:
 
   ```bash
   conda env update -f environment.yml --prune
   ```
 
+> By default, this environment is named **heatmap-iot-analytics**. If you wish to use a different name, edit
+`environment.yml`
+> accordingly.
+
 ### Configuring MongoDB Connection Variables
 
-The project uses environment variables to configure the MongoDB connection. After creating or updating your Conda
-environment, set the appropriate variables using the following commands:
+After creating or updating the Conda environment, configure your MongoDB credentials:
 
 ```bash
-conda env config vars set MONGO_PASSWORD="your_password"
 conda env config vars set MONGO_USERNAME="your_username"
+conda env config vars set MONGO_PASSWORD="your_password"
 conda env config vars set MONGO_URL="your_url"
 ```
 
-After setting these variables, it is important to deactivate and then reactivate your environment to apply the changes:
+Deactivate and reactivate the environment for changes to take effect:
 
 ```bash
 conda deactivate
-conda activate heatmap-analytics
+conda activate heatmap-iot-analytics
 ```
 
 ---
 
-## Running the Application
+## Running the Backend Application
 
-With the environment activated and all dependencies installed, run the main application:
+1. In the root directory, run the Spark application:
 
-```bash
-python main.py
-```
+   ```bash
+   python main.py
+   ```
+
+2. Check for any console output or logs to ensure the server has started successfully.
+
+---
+
+## Running the Angular Client
+
+The Angular client resides in the **client/** directory. Steps to build and serve the client
+at [Client Readme](client/README.md)
 
 ---
 
 ## Additional Notes
 
-- **IDE Configuration:** If you use an IDE like PyCharm, make sure its interpreter is set to the correct Conda
-  environment. Some IDEs may not automatically import the environment variables set via Conda; in this case, configure
-  them manually in the run configurations.
-- **Troubleshooting:**  
-  If you encounter errors related to MongoDB connection (for example, "Invalid URI host: none is not a valid hostname"),
-  double-check that all MongoDB-related variables (`MONGO_PASSWORD`, `MONGO_USERNAME`, `MONGO_URL`) are correctly
-  configured and loaded in your environment.
-
-Follow these guidelines to ensure that all required dependencies and configurations for data processing and analytics
-are set.
-Enjoy exploring your new analytics pipeline!
+- **IDE Configuration**: If you use an IDE (such as PyCharm or VSCode), make sure it points to the correct Conda
+  environment for the Python backend.
+- **Troubleshooting**:
+    - If you see MongoDB connection errors, verify your `MONGO_*` environment variables.
+- **Further Documentation**:
+    - Check the **web/README.md** for more backend-api-specific details.
+    - Check the **client/README.md** for more client-specific details.

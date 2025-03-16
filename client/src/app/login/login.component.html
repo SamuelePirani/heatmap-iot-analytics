@@ -1,0 +1,31 @@
+<nb-card>
+  <nb-card-header class="login-header">
+    <h3> Login </h3>
+  </nb-card-header>
+
+  <nb-card-body class="card-body">
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+
+      <nb-form-field>
+        <input type="text" nbInput placeholder="Username">
+      </nb-form-field>
+
+
+      <nb-form-field>
+        <input [type]="getInputType()" nbInput placeholder="Password">
+        <button nbSuffix nbButton ghost (click)="toggleShowPassword()">
+          <nb-icon [icon]="showPassword ? 'eye-outline' : 'eye-off-2-outline'"
+                   pack="eva"
+                   [attr.aria-label]="showPassword ? 'hide password' : 'show password'">
+          </nb-icon>
+        </button>
+      </nb-form-field>
+
+    </form>
+  </nb-card-body>
+  <nb-card-footer class="login-footer">
+    <button nbButton (click)="close()">Cancel</button>
+    <button nbButton status="primary" type="submit">Accedi</button>
+  </nb-card-footer>
+</nb-card>
+

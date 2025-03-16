@@ -1,0 +1,389 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Building",
+        "name": "Polo Informatica \"Carla Lodovici\" - Edificio A",
+        "layer": 2
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              13.068491976860969,
+              43.139545996513675
+            ],
+            [
+              13.068616223515164,
+              43.13940373898765
+            ],
+            [
+              13.0690839956427,
+              43.13962312676486
+            ],
+            [
+              13.068964534907991,
+              43.13976157478817
+            ],
+            [
+              13.068491976860969,
+              43.139545996513675
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": 0
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Room",
+        "name": "AB2",
+        "description": "Aula AB2 - Polo A"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              13.068968768245298,
+              43.139694952407325
+            ],
+            [
+              13.068930013540239,
+              43.13974057922542
+            ],
+            [
+              13.068762895745806,
+              43.13966291851665
+            ],
+            [
+              13.068802570692867,
+              43.13961752467719
+            ],
+            [
+              13.068968768245298,
+              43.139694952407325
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": 1
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Room",
+        "name": "AB3",
+        "description": "Aula AB3 - Polo A"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              13.068679522103594,
+              43.13952625767547
+            ],
+            [
+              13.06859475538593,
+              43.13948842662771
+            ],
+            [
+              13.06864293033422,
+              43.13943477770985
+            ],
+            [
+              13.06872679516178,
+              43.13947348594709
+            ],
+            [
+              13.068679522103594,
+              43.13952625767547
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": 2
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Room",
+        "name": "AB1",
+        "description": "Aula AB1 - Polo A"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              13.069014017306642,
+              43.13964070000861
+            ],
+            [
+              13.068975819946388,
+              43.13968513736722
+            ],
+            [
+              13.068812483603324,
+              43.13960905319689
+            ],
+            [
+              13.06885143373708,
+              43.13956454771298
+            ],
+            [
+              13.069014017306642,
+              43.13964070000861
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": 3
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "pir sensor",
+        "hotel_room_id": 421,
+        "room": "AB2"
+      },
+      "geometry": {
+        "coordinates": [
+          13.068795258533584,
+          43.1396629623155
+        ],
+        "type": "Point"
+      },
+      "id": 4
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "co2 sensor",
+        "hotel_room_id": 421,
+        "room": "AB2"
+      },
+      "geometry": {
+        "coordinates": [
+          13.068845558485862,
+          43.13968816820966
+        ],
+        "type": "Point"
+      },
+      "id": 5
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "humidity sensor",
+        "hotel_room_id": 421,
+        "room": "AB2"
+      },
+      "geometry": {
+        "coordinates": [
+          13.068900100601724,
+          43.13971425850954
+        ],
+        "type": "Point"
+      },
+      "id": 6
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "temperature sensor",
+        "hotel_room_id": 421,
+        "room": "AB2"
+      },
+      "geometry": {
+        "coordinates": [
+          13.068838892227234,
+          43.139657213601566
+        ],
+        "type": "Point"
+      },
+      "id": 7
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "light sensor",
+        "hotel_room_id": 421,
+        "room": "AB2"
+      },
+      "geometry": {
+        "coordinates": [
+          13.068907978907134,
+          43.1396824194976
+        ],
+        "type": "Point"
+      },
+      "id": 8
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "pir sensor",
+        "hotel_room_id": 422,
+        "room": "AB1"
+      },
+      "geometry": {
+        "coordinates": [
+          13.068853436791244,
+          43.13961343491505
+        ],
+        "type": "Point"
+      },
+      "id": 9
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "co2 sensor",
+        "hotel_room_id": 422,
+        "room": "AB1"
+      },
+      "geometry": {
+        "coordinates": [
+          13.068889798202889,
+          43.13959397771089
+        ],
+        "type": "Point"
+      },
+      "id": 10
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "humidity sensor",
+        "hotel_room_id": 422,
+        "room": "AB1"
+      },
+      "geometry": {
+        "coordinates": [
+          13.068915251189196,
+          43.139639967456134
+        ],
+        "type": "Point"
+      },
+      "id": 11
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "temperature sensor",
+        "hotel_room_id": 422,
+        "room": "AB1"
+      },
+      "geometry": {
+        "coordinates": [
+          13.068946158388883,
+          43.13962581676887
+        ],
+        "type": "Point"
+      },
+      "id": 12
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "light sensor",
+        "hotel_room_id": 422,
+        "room": "AB1"
+      },
+      "geometry": {
+        "coordinates": [
+          13.068971005353319,
+          43.13965898243691
+        ],
+        "type": "Point"
+      },
+      "id": 13
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "pir sensor",
+        "hotel_room_id": 423,
+        "room": "AB3"
+      },
+      "geometry": {
+        "coordinates": [
+          13.068616285313254,
+          43.13948665994391
+        ],
+        "type": "Point"
+      },
+      "id": 14
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "light sensor",
+        "hotel_room_id": 423,
+        "room": "AB3"
+      },
+      "geometry": {
+        "coordinates": [
+          13.06866961538239,
+          43.13950877044138
+        ],
+        "type": "Point"
+      },
+      "id": 15
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "co2 sensor",
+        "hotel_room_id": 423,
+        "room": "AB3"
+      },
+      "geometry": {
+        "coordinates": [
+          13.068649010583073,
+          43.139472067011155
+        ],
+        "type": "Point"
+      },
+      "id": 16
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "temperature sensor",
+        "hotel_room_id": 423,
+        "room": "AB3"
+      },
+      "geometry": {
+        "coordinates": [
+          13.068687190063258,
+          43.1394928508837
+        ],
+        "type": "Point"
+      },
+      "id": 17
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "humidity sensor",
+        "hotel_room_id": 423,
+        "room": "AB3"
+      },
+      "geometry": {
+        "coordinates": [
+          13.068682341876269,
+          43.13947162480059
+        ],
+        "type": "Point"
+      },
+      "id": 18
+    }
+  ]
+}

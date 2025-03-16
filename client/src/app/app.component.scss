@@ -1,0 +1,35 @@
+$gap-large: 24px;
+$gap-small: 4px;
+$header-gap: 8px;
+$logo-size: 48px;
+
+@mixin flex-column($gap: 0) {
+  display: flex;
+  align-content: flex-start;
+  flex-direction: column;
+  gap: $gap;
+}
+
+.sel-items-box {
+  @include flex-column($gap-large);
+}
+
+.sel-item {
+  @include flex-column($gap-small);
+}
+
+.header-layout {
+  display: flex;
+  align-items: center;
+  gap: $header-gap;
+}
+
+.logo-header {
+  width: $logo-size;
+  height: auto;
+  margin-right: $header-gap;
+}
+
+.no-margin-card {
+  margin-bottom: 0 !important;
+}

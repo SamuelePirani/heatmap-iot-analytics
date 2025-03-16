@@ -3,9 +3,9 @@ import os
 
 from pyspark.sql import SparkSession
 
-from config.configuration_manager import ConfigurationManager
 from src.analysis.analyzer import Analyzer
 from src.analysis.spark_data_reader import SparkDataReader
+from src.config.configuration_manager import ConfigurationManager
 from src.database.db_config import connect_to_db
 from src.normalization.mapper_invoker import invoke_normalization
 
@@ -43,7 +43,7 @@ def load_and_analyze(spark, config: dict, client):
         analyzer = Analyzer(reader)
         logger.info("Data loading complete")
         logger.info("Running analysis...")
-        analyzer.run_analysis(config["intervals"], client, config["config_datapath"]["geoJson_data"])
+        analyzer.run_analysis(config["intervals"], client)
         logger.info("Analysis complete")
     except Exception as e:
         logger.error(f"Error during loading or analysis: {e}")
