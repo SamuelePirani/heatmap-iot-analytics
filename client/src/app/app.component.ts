@@ -155,7 +155,6 @@ export class AppComponent {
           if(this.valueArray.length != 0){
             this.valueArray = []
           }
-          this.toggleLoadingAnimation()
           this.queryResponse.forEach(
             (element: any) => {
               if (element.start) {

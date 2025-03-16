@@ -29,3 +29,7 @@ $logo-size: 48px;
   height: auto;
   margin-right: $header-gap;
 }
+
+.no-margin-card {
+  margin-bottom: 0 !important;
+}

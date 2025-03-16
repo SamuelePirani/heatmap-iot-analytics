@@ -83,7 +83,6 @@
               (click)="onQueryButtonClick()">
         Query
       </button>
-
     </div>
   </nb-sidebar>
 
@@ -93,13 +92,14 @@
       [geoJsonUrl]="selectedFloor"
     />
 
-    <nb-card *ngIf="queryResponse">
+    <nb-card *ngIf="queryResponse" class = "no-margin-card">
       <nb-card-body>
         <input type="text" nbInput fullWidth [value]="getSliderValue() || ''" class="w-full mb-4" readonly />
 
         <p-slider [(ngModel)]="sliderIndex" [min]="0" [max]="valueArray.length - 1"
                   (onChange)="onSliderChange($event)" styleClass="w-56" />
       </nb-card-body>
+      <app-data-table [min]="1" [max] = "2" />
     </nb-card>
 
   </nb-layout-column>

@@ -25,13 +25,16 @@ import Aura from '@primeng/themes/aura';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { SliderModule } from 'primeng/slider';
 import {InputText} from 'primeng/inputtext';
+import { DataTableComponent } from './data-table/data-table.component';
+import {TableModule} from 'primeng/table';
 
 
 @NgModule({
     declarations: [
         AppComponent,
         HeatmapComponent,
-        LoginComponent
+        LoginComponent,
+        DataTableComponent
     ],
   imports: [
     BrowserModule,
@@ -57,7 +60,8 @@ import {InputText} from 'primeng/inputtext';
     NbDatepickerModule.forRoot(),
     NbSpinnerModule,
     InputText,
-    NbToastrModule.forRoot()
+    NbToastrModule.forRoot(),
+    TableModule
   ],
     providers: [
         provideClientHydration(withEventReplay()),
