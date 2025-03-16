@@ -13,6 +13,33 @@
 }
 
 .data-container{
-  margin: 1rem;
+  margin-top: 1rem;
   background-color: transparent;
+}
+
+.transparent-table ::ng-deep .p-datatable {
+  background: #192038 !important;
+  border: 1px solid #101426 !important; /* Bordo bianco */
+}
+
+.transparent-table ::ng-deep .p-datatable-header {
+  background: #192038 !important;
+  border-bottom: 1px solid #101426 !important; /* Bordo bianco sotto l'intestazione */
+}
+
+.transparent-table ::ng-deep .p-datatable-thead > tr > th {
+  background: #101426 !important;
+  color: var(--nb-text-primary-color) !important;
+  border: 1px solid #101426 !important; /* Bordo bianco per le celle dell'intestazione */
+}
+
+.transparent-table ::ng-deep .p-datatable-tbody > tr {
+  background: #192038 !important;
+  border-bottom: 1px solid #101426 !important; /* Bordo bianco tra le righe del corpo */
+}
+
+.transparent-table ::ng-deep .p-datatable-tbody > tr > td {
+  background: #192038 !important;
+  color: var(--nb-text-primary-color) !important;
+  border: 1px solid #101426 !important; /* Bordo bianco per le celle del corpo */
 }
