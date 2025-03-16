@@ -2,9 +2,6 @@ import {Component, Inject, PLATFORM_ID, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {isPlatformBrowser} from '@angular/common';
 import GeoJSON from 'ol/format/GeoJSON';
-import {DataService} from "./data.service";
-import {LoginComponent} from './login/login.component';
-import {NbDialogService} from '@nebular/theme';
 import {WebService} from '../services/web.service';
 import {HeatmapComponent} from './heatmap/heatmap.component';
 
