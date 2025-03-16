@@ -10,7 +10,7 @@ import {
   NbSelectModule,
   NbSidebarModule,
   NbThemeModule,
-  NbDatepickerModule, NbSpinnerModule
+  NbDatepickerModule, NbSpinnerModule, NbToastrModule
 } from '@nebular/theme';
 import {HeatmapComponent} from './heatmap/heatmap.component';
 import {provideHttpClient} from '@angular/common/http';
@@ -55,7 +55,8 @@ import {InputText} from 'primeng/inputtext';
     FormsModule,
     NbDatepickerModule.forRoot(),
     NbSpinnerModule,
-    InputText
+    InputText,
+    NbToastrModule.forRoot()
   ],
     providers: [
         provideClientHydration(withEventReplay()),
