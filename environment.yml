@@ -9,5 +9,7 @@ dependencies:
   - pyyaml
   - openjdk=17.0.14
   - python=3.9.21
-  - openssl
+  - bson
+  - pymongo=4.11
   - geojson=3.2.0
+  - openssl
