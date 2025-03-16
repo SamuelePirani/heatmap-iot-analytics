@@ -7,7 +7,7 @@ import { Component, Input, SimpleChanges } from '@angular/core';
     styleUrls: ['./data-table.component.scss']
 })
 export class DataTableComponent {
-    @Input() roomData!: { room_name: string, min: number, max: number, avg: number }[];
+    @Input() roomData!: { room_name: string, min: string, max: string, avg: string }[];
 
     constructor() {
     }

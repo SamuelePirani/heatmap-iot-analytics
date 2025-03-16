@@ -53,6 +53,7 @@ export class AppComponent {
 
   valueArray: string[] = [];
   sliderIndex: number = 0;
+  dataUnit: string = 'Temperature'
 
   constructor(
     @Inject(PLATFORM_ID) private readonly platformId: object,
@@ -265,22 +266,46 @@ export class AppComponent {
     })
   }
 
-  roomData: { room_name: string, min: number, max: number, avg: number }[] = []
+  roomData: { room_name: string, min: string, max: string, avg: string }[] = []
+
+
+  private updateDataUnit(): void {
+    switch (this.getSelectedSensor()) {
+      case 'temperature':
+        this.dataUnit = '°C'
+        break;
+      case 'humidity':
+        this.dataUnit = '%'
+        break;
+      case 'co2':
+        this.dataUnit = 'ppm'
+        break;
+      case 'light':
+        this.dataUnit = 'lux'
+        break;
+      case 'pir':
+        this.dataUnit = ''
+        break;
+      default:
+        this.dataUnit = ''
+    }
+  }
 
   public updateDataTable(): void {
     if (this.queryResponse && this.getSliderValue()) {
-      const newRoomData: { room_name: string, min: number, max: number, avg: number }[] = []
+      const newRoomData: { room_name: string, min: string, max: string, avg: string }[] = []
       const filteredData = this.queryResponse.filter((item: any) => {
         return this.rooms.includes(item['room_name']) && new Date(item['start']).getTime() === new Date(this.getSliderValue()).getTime()
       })
+      this.updateDataUnit()
       filteredData.forEach((item: any) => {
         const sensors = item['sensors']
         sensors.filter((sensor: any) => sensor['type'] === this.getSelectedSensor()).forEach((s: any) => {
           newRoomData.push({
             room_name: item['room_name'],
-            min: s['min'],
-            max: s['max'],
-            avg: s['mean']
+            min: s['min'] + ' ' + this.dataUnit,
+            max: s['max'] + ' ' + this.dataUnit,
+            avg: s['mean'] + ' ' + this.dataUnit
           })
         })
       })
